@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/views/chat_view.dart';
 import 'dashboard_view.dart';
 import 'diary_view.dart';
 
@@ -15,10 +16,8 @@ class _MainViewState extends State<MainView> {
   // Lista que mapeia o índice da aba para a respectiva View
   final List<Widget> _views = [
     const DashboardView(), // 0: Hoje
-    const DiaryView(),     // 1: Diário
-    
-    // Placeholders para as próximas telas que você for desenvolver
-    const Center(child: Text('Tela de Chat em construção')),   // 2: Chat
+    const DiaryView(), // 1: Diário
+    const ChatView(),  // 2: Chat
     const Center(child: Text('Tela de Fotos em construção')),  // 3: Fotos
     const Center(child: Text('Tela de Perfil em construção')), // 4: Perfil
   ];
