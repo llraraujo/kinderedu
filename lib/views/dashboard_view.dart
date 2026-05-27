@@ -64,8 +64,7 @@ class _DashboardViewState extends State<DashboardView> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: _buildBottomNav(),
+      )
     );
   }
 
@@ -270,20 +269,4 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _buildBottomNav() {
-    return BottomNavigationBar(
-      currentIndex: _currentIndex,
-      onTap: (index) => setState(() => _currentIndex = index),
-      type: BottomNavigationBarType.fixed,
-      selectedItemColor: const Color(0xFF7B3AED),
-      unselectedItemColor: Colors.grey[400],
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Hoje'),
-        BottomNavigationBarItem(icon: Icon(Icons.calendar_today_outlined), label: 'Diário'),
-        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outline), label: 'Chat'),
-        BottomNavigationBarItem(icon: Icon(Icons.photo_library_outlined), label: 'Fotos'),
-        BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: 'Perfil'),
-      ],
-    );
-  }
 }

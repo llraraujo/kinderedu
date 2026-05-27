@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kinderedu/views/dashboard_view.dart';
+import 'package:kinderedu/views/main_view.dart';
 
 import '../Components/input_field.dart';
 import '../Components/role_button.dart';
@@ -173,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
               // 7. Botão Entrar
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const DashboardView()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainView()));
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
