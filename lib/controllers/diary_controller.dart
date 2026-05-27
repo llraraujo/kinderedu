@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/models/header_model.dart';
 import '../models/diary_model.dart';
 
 class DiaryController {
+   ChildProfile getChildProfile() {
+    return childProfileHeader;
+  }
   // Simula a busca de eventos do diário
   List<DiaryEntry> getDiaryEntries() {
     return [

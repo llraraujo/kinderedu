@@ -1,18 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ChildProfile {
-  final String name;
-  final String age;
-  final String imageUrl;
-  final String currentDate;
 
-  ChildProfile({
-    required this.name,
-    required this.age,
-    required this.imageUrl,
-    required this.currentDate,
-  });
-}
 
 class ActivitySummary {
   final String title;

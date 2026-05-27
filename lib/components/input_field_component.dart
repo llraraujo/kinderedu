@@ -1,7 +1,7 @@
 /// Componente customizado para o botão de seleção de perfil
   import 'package:flutter/material.dart';
 
-  Widget BuildInputField({
+  Widget inputField({
     required String label,
     required String hint,
     required IconData prefixIcon,

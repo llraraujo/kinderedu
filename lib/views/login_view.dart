@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kinderedu/views/dashboard_view.dart';
+import 'package:kinderedu/components/input_field_component.dart';
+import 'package:kinderedu/components/role_button_component.dart';
 import 'package:kinderedu/views/main_view.dart';
 
-import '../Components/input_field.dart';
-import '../Components/role_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -86,13 +85,13 @@ class _LoginScreenState extends State<LoginScreen> {
               // 3. Toggle Responsável / Educador
               Row(
                 children: [
-                  BuildRoleButton(
+                  roleButton(
                     title: 'Responsável',
                     isSelected: !isEducador,
                     onTap: () => setState(() => isEducador = false),
                   ),
                   const SizedBox(width: 12),
-                  BuildRoleButton(
+                  roleButton(
                     title: 'Educador',
                     isSelected: isEducador,
                     onTap: () => setState(() => isEducador = true),
@@ -102,7 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
 
               // 4. Campo de CPF (Label dinâmico)
-              BuildInputField(
+              inputField(
                 label: isEducador ? 'CPF do educador' : 'CPF do Responsável',
                 hint: '000.000.000-00',
                 prefixIcon: Icons.person_outline,
@@ -111,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 20),
 
               // 5. Campo de Senha
-              BuildInputField(
+              inputField(
                 label: 'Senha',
                 hint: '••••••••',
                 prefixIcon: Icons.lock_outline,

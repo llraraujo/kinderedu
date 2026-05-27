@@ -3,7 +3,7 @@
   
 
   /// Componente customizado para o botão de seleção de perfil
-  Widget BuildRoleButton({
+  Widget roleButton({
     required String title,
     required bool isSelected,
     required VoidCallback onTap,

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/models/header_model.dart';
 import '../models/dashboard_model.dart'; // Ajuste o import conforme sua estrutura
 
 class DashboardController {
   // Simula a busca de dados do perfil da criança
   ChildProfile getChildProfile() {
-    return ChildProfile(
-      name: 'Ana Clara',
-      age: '8 meses',
-      imageUrl: 'https://via.placeholder.com/150', // Substitua pela URL da foto
-      currentDate: '27 de Novembro, 2025 • Quarta-feira',
-    );
+    return childProfileHeader;
   }
 
   // Simula a busca das atividades do dia

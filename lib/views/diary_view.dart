@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/components/header_component.dart';
+import 'package:kinderedu/models/header_model.dart';
 import '../controllers/diary_controller.dart';
 import '../models/diary_model.dart';
 
@@ -12,11 +14,13 @@ class DiaryView extends StatefulWidget {
 class _DiaryViewState extends State<DiaryView> {
   final DiaryController _controller = DiaryController();
   late List<DiaryEntry> _entries;
+  late ChildProfile _profile;
 
   @override
   void initState() {
     super.initState();
     _entries = _controller.getDiaryEntries();
+    _profile = _controller.getChildProfile();
   }
 
   @override
@@ -25,7 +29,7 @@ class _DiaryViewState extends State<DiaryView> {
       backgroundColor: Colors.grey[50],
       body: Column(
         children: [
-          _buildHeader(), // Reutilizando a lógica do Dashboard
+          header(_profile), // Reutilizando a lógica do Dashboard
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
@@ -45,47 +49,6 @@ class _DiaryViewState extends State<DiaryView> {
     );
   }
 
-  // Cabeçalho idêntico ao Dashboard para consistência
-  Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 20),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFF7B3AED), Color(0xFF9D4EDD)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-      child: Row(
-        children: [
-          const CircleAvatar(
-            radius: 28,
-            backgroundImage: NetworkImage('https://via.placeholder.com/150'),
-          ),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Ana Clara', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white)),
-                Text('8 meses', style: TextStyle(fontSize: 14, color: Colors.white70)),
-              ],
-            ),
-          ),
-          _buildCircleIconButton(Icons.notifications_outlined, const Color(0x33FFFFFF)),
-          const SizedBox(width: 10),
-          _buildCircleIconButton(Icons.phone, Colors.redAccent),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCircleIconButton(IconData icon, Color color) {
-    return Container(
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
-      child: IconButton(icon: Icon(icon, color: Colors.white), onPressed: () {}),
-    );
-  }
 
   // Card de seleção de data
   Widget _buildDateSelector() {
