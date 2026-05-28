@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinderedu/views/chat_view.dart';
 import 'package:kinderedu/views/photos_view.dart';
+import 'package:kinderedu/views/profile_view.dart';
 import 'dashboard_view.dart';
 import 'diary_view.dart';
 
@@ -20,7 +21,7 @@ class _MainViewState extends State<MainView> {
     const DiaryView(),  // 1: Diário
     const ChatView(),   // 2: Chat
     const PhotosView(), // 3: Fotos
-    const Center(child: Text('Tela de Perfil em construção')), // 4: Perfil
+    const ProfileView(), // 4: Perfil
   ];
 
   @override
