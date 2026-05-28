@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinderedu/components/header_component.dart';
 import 'package:kinderedu/models/header_model.dart';
+import 'package:kinderedu/views/login_view.dart';
 import '../controllers/profile_controller.dart';
 import '../models/profile_model.dart';
 
@@ -13,40 +14,38 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final ProfileController _controller = ProfileController();
-  
-  late UserProfile _userProfile;
-  late LinkedChild _linkedChild;
   late ChildProfile _profile;
-  late List<EmergencyContact> _emergencyContacts;
 
   @override
   void initState() {
     super.initState();
-    _userProfile = _controller.getUserProfile();
-    _linkedChild = _controller.getLinkedChild();
     _profile = _controller.getChildProfile();
-    _emergencyContacts = _controller.getEmergencyContacts();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: const Color(0xFFF8F9FE),
       body: Column(
         children: [
-          header(_profile), // Cabeçalho roxo mantido para contexto
+          header(_profile), // Cabeçalho roxo (Ana Clara)
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildResponsibleCard(),
+                  _buildIdentityCard(), // Card da Maria Silva
                   const SizedBox(height: 20),
-                  _buildLinkedChildCard(),
+                  _buildMenuSection('Conta', _controller.getAccountOptions()),
                   const SizedBox(height: 20),
-                  _buildEmergencyContactsCard(),
-                  const SizedBox(height: 20), // Espaço extra no final do scroll
+                  _buildMenuSection('Emergência', _controller.getEmergencyOptions()),
+                  const SizedBox(height: 20),
+                  _buildMenuSection('Segurança', _controller.getSecurityOptions()),
+                  const SizedBox(height: 30),
+                  _buildLogoutButton(),
+                  const SizedBox(height: 15),
+                  const Text('Kinder Edu v1.0.0', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -56,181 +55,92 @@ class _ProfileViewState extends State<ProfileView> {
     );
   }
 
-
-  // 1. Card do Responsável
-  Widget _buildResponsibleCard() {
-    return _buildBaseCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(_userProfile.imageUrl),
-              ),
-              const SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _userProfile.name,
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
-                  ),
-                  Text(
-                    _userProfile.role,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const Padding(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            child: Divider(height: 1, color: Color(0xFFEEEEEE)),
-          ),
-          _buildContactInfoRow(Icons.email_outlined, _userProfile.email, Colors.blue),
-          const SizedBox(height: 12),
-          _buildContactInfoRow(Icons.smartphone_outlined, _userProfile.phone, Colors.purple),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildContactInfoRow(IconData icon, String text, Color iconColor) {
-    return Row(
+  // Seção de Menu Agrupada
+  Widget _buildMenuSection(String sectionTitle, List<ProfileMenuOption> options) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          padding: const EdgeInsets.all(6),
-          decoration: BoxDecoration(
-            color: iconColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(8),
+        Padding(
+          padding: const EdgeInsets.only(left: 5, bottom: 8),
+          child: Text(
+            sectionTitle,
+            style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
           ),
-          child: Icon(icon, size: 16, color: iconColor),
         ),
-        const SizedBox(width: 12),
-        Text(
-          text,
-          style: const TextStyle(fontSize: 14, color: Color(0xFF2D3142)),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+          ),
+          child: Column(
+            children: options.asMap().entries.map((entry) {
+              int idx = entry.key;
+              ProfileMenuOption opt = entry.value;
+              return Column(
+                children: [
+                  ListTile(
+                    leading: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(color: opt.color.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
+                      child: Icon(opt.icon, color: opt.color, size: 20),
+                    ),
+                    title: Text(opt.title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
+                    trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
+                    onTap: opt.onTap,
+                  ),
+                  if (idx != options.length - 1) // Divisor entre itens, menos no último
+                    const Divider(height: 1, indent: 60, endIndent: 20, color: Color(0xFFF1F1F1)),
+                ],
+              );
+            }).toList(),
+          ),
         ),
       ],
     );
   }
 
-  // 2. Card da Criança Vinculada
-  Widget _buildLinkedChildCard() {
-    return _buildBaseCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildLogoutButton() {
+    return TextButton.icon(
+      onPressed: () {
+         Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+      },
+      style: TextButton.styleFrom(
+        foregroundColor: Colors.redAccent,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(color: Colors.redAccent.withOpacity(0.2)),
+        ),
+      ),
+      icon: const Icon(Icons.logout_rounded, size: 20),
+      label: const Text('Sair da Conta', style: TextStyle(fontWeight: FontWeight.bold)),
+    );
+  }
+
+
+
+  Widget _buildIdentityCard() {
+    return Container(
+      padding: const EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+      ),
+      child: Row(
         children: [
-          const Text(
-            'Criança Vinculada',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
-          ),
-          const SizedBox(height: 15),
-          Row(
+          const CircleAvatar(radius: 25, backgroundImage: NetworkImage('https://via.placeholder.com/150')),
+          const SizedBox(width: 15),
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 25,
-                backgroundImage: NetworkImage(_linkedChild.imageUrl),
-              ),
-              const SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    _linkedChild.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Color(0xFF2D3142)),
-                  ),
-                  Text(
-                    _linkedChild.age,
-                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
-                  ),
-                ],
-              ),
+              Text('Maria Silva', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              Text('Responsável', style: TextStyle(color: Colors.grey, fontSize: 13)),
             ],
           ),
         ],
       ),
-    );
-  }
-
-  // 3. Card de Contatos de Emergência
-  Widget _buildEmergencyContactsCard() {
-    return _buildBaseCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Contatos de Emergência',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
-          ),
-          const SizedBox(height: 15),
-          ..._emergencyContacts.map((contact) {
-            return Padding(
-              padding: const EdgeInsets.only(bottom: 12.0),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: Colors.grey[50], // Fundo levemente cinza do item
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.grey.withOpacity(0.1)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          contact.name,
-                          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Color(0xFF2D3142)),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          contact.phone,
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green.withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.phone, color: Colors.green, size: 20),
-                        onPressed: () {
-                          // Lógica para fazer a ligação
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
-        ],
-      ),
-    );
-  }
-
-  // Widget Base para reaproveitar o estilo do Card branco com sombra
-  Widget _buildBaseCard({required Widget child}) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: child,
     );
   }
 }

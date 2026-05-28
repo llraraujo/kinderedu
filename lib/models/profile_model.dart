@@ -1,3 +1,20 @@
+
+import 'package:flutter/material.dart';
+
+class ProfileMenuOption {
+  final String title;
+  final IconData icon;
+  final Color color;
+  final VoidCallback onTap;
+
+  ProfileMenuOption({
+    required this.title,
+    required this.icon,
+    required this.color,
+    required this.onTap,
+  });
+}
+
 class UserProfile {
   final String name;
   final String role;
