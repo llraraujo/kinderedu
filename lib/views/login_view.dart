@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kinderedu/components/input_field_component.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:kinderedu/components/role_button_component.dart';
+import 'package:kinderedu/controllers/login_controller.dart';
+import 'package:kinderedu/models/login_model.dart';
 import 'package:kinderedu/views/main_view.dart';
 
 
@@ -13,9 +15,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   // Controle de estado
+  final LoginController _controller = LoginController();
+  final TextEditingController _cpf = TextEditingController();
+  final TextEditingController _senha = TextEditingController();
+  final maskCpf = MaskTextInputFormatter(mask: "###.###.###-##", filter: {"#": RegExp(r'[0-9]')});
   bool isEducador = true; // Define qual aba está selecionada
   bool obscurePassword = true;
   bool rememberMe = false;
+  String _msgExisteUsuario = "";
+
+   @override
+   void initState() {
+    super.initState();
+  }
+
+  void _limparCampos() {
+    setState(() {   
+       _cpf.text = "";
+       _senha.text = "";
+       _msgExisteUsuario = "";
+    });
+  }
 
   // Cores principais baseadas na imagem
   final Color primaryColor = const Color(0xFF5654A2); // Roxo/Azul do botão
@@ -101,20 +121,27 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(height: 24),
 
               // 4. Campo de CPF (Label dinâmico)
-              inputField(
-                label: isEducador ? 'CPF do educador' : 'CPF do Responsável',
-                hint: '000.000.000-00',
-                prefixIcon: Icons.person_outline,
+              TextField(
+                inputFormatters: [maskCpf],
+                decoration: InputDecoration(
+                label: Text(isEducador ? 'CPF do educador' : 'CPF do Responsável'),
+                hintText: '000.000.000-00',
+                prefixIcon: Icon(Icons.person_outline)
+                ),
+                controller: _cpf,
                 keyboardType: TextInputType.number,
+                
               ),
               const SizedBox(height: 20),
 
               // 5. Campo de Senha
-              inputField(
-                label: 'Senha',
-                hint: '••••••••',
-                prefixIcon: Icons.lock_outline,
+              TextField(
+                controller: _senha,
                 obscureText: obscurePassword,
+                decoration: InputDecoration(
+                label: Text('Senha'),
+                hintText: '••••••••',
+                prefixIcon: Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
                   icon: Icon(
                     obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
@@ -122,6 +149,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   onPressed: () => setState(() => obscurePassword = !obscurePassword),
                 ),
+                )
+            
+                
               ),
               const SizedBox(height: 12),
 
@@ -173,7 +203,18 @@ class _LoginScreenState extends State<LoginScreen> {
               // 7. Botão Entrar
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MainView()));
+                  var user = _controller.getUsuariosCadastrados().firstWhere(
+                    (user) => user.cpf == _cpf.text && user.senha == _senha.text,
+                    orElse: () =>  User(cpf:"",senha:"")
+                  );
+                  if(user.cpf.isNotEmpty && user.senha.isNotEmpty){
+                    _limparCampos();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MainView()));
+                    return;
+                  }
+                  setState(() {
+                     _msgExisteUsuario = "usuário/senha não existe na base de dados.";
+                  });                 
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
@@ -192,6 +233,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+              Text(
+                _msgExisteUsuario,
+                style: const TextStyle(color: Colors.red),
+            ),
             ],
           ),
         ),
