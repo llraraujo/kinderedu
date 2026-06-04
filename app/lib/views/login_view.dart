@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/views/professor_dashboard_view.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:kinderedu/components/role_button_component.dart';
 import 'package:kinderedu/controllers/login_controller.dart';
@@ -205,15 +206,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   var user = _controller.getUsuariosCadastrados().firstWhere(
                     (user) => user.cpf == _cpf.text && user.senha == _senha.text,
-                    orElse: () =>  User(cpf:"",senha:"")
+                    orElse: () =>  User(cpf:"",senha:"", role: "")
                   );
                   if(user.cpf.isNotEmpty && user.senha.isNotEmpty){
                     _limparCampos();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MainView()));
-                    return;
+                    if(isProfessor && user.role == "PROFESSOR"){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfessorDashboardView(user: user)));
+                      return;
+                    }
+                    if(!isProfessor && user.role == "RESPONSAVEL"){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainView(user: user)));
+                      return;
+                    }
                   }
                   setState(() {
-                     _msgExisteUsuario = "usuário/senha não existe na base de dados.";
+                     _msgExisteUsuario = "cpf ou senha inválido.";
                   });                 
                 },
                 style: ElevatedButton.styleFrom(

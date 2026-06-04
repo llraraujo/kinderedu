@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/models/login_model.dart';
 import 'package:kinderedu/views/diary_tab_navigator.dart';
 import 'package:kinderedu/views/photo_tab_navigator.dart';
 import 'package:kinderedu/views/profile_view.dart';
 import 'dashboard_view.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({Key? key}) : super(key: key);
+  const MainView({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<MainView> createState() => _MainViewState();
