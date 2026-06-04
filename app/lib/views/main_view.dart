@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinderedu/views/chat_view.dart';
 import 'package:kinderedu/views/diary_tab_navigator.dart';
+import 'package:kinderedu/views/photo_tab_navigator.dart';
 import 'package:kinderedu/views/photos_view.dart';
 import 'package:kinderedu/views/profile_view.dart';
 import 'dashboard_view.dart';
@@ -21,7 +22,7 @@ class _MainViewState extends State<MainView> {
     const DashboardView(), // 0: Hoje
     const DiaryTabNavigator(),  // 1: Diário
     const ChatView(),   // 2: Chat
-    const PhotosView(), // 3: Fotos
+    const PhotoTabNavigator(), // 3: Fotos
     const ProfileView(), // 4: Perfil
   ];
 
