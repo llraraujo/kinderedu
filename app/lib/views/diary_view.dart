@@ -8,38 +8,36 @@ class DiaryView extends StatefulWidget {
   const DiaryView({Key? key}) : super(key: key);
 
   @override
-  State<DiaryView> createState() => _DiaryViewState();
+  State<DiaryView> createState() => _DiaryYearViewState();
 }
 
-class _DiaryViewState extends State<DiaryView> {
+class _DiaryYearViewState extends State<DiaryView> {
   final DiaryController _controller = DiaryController();
-  late List<DiaryEntry> _entries;
-  late ChildProfile _profile;
+  late List<DiaryEntry> _years;
+  late ChildProfile _profile; 
 
   @override
   void initState() {
     super.initState();
-    _entries = _controller.getDiaryEntries();
+    _years = _controller.getAvailableYears();
     _profile = _controller.getChildProfile();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: const Color(0xFFF8F9FE), // Fundo levemente azulado/cinza
       body: Column(
         children: [
-          header(_profile), // Reutilizando a lógica do Dashboard
+          header(_profile),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  _buildDateSelector(),
+                  _buildTitleCard(),
                   const SizedBox(height: 25),
-                  _buildTimelineHeader(),
-                  const SizedBox(height: 20),
-                  _buildTimelineList(),
+                  _buildYearsList(),
                 ],
               ),
             ),
@@ -50,29 +48,28 @@ class _DiaryViewState extends State<DiaryView> {
   }
 
 
-  // Card de seleção de data
-  Widget _buildDateSelector() {
+  // Card informativo superior
+  Widget _buildTitleCard() {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.purple.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.calendar_month, color: Color(0xFF7B3AED)),
+            decoration: BoxDecoration(color: Colors.blue.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            child: const Icon(Icons.description_outlined, color: Colors.blue),
           ),
           const SizedBox(width: 15),
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Diário de Atividades', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
-              Text('27 de Novembro, 2025', style: TextStyle(fontSize: 14, color: Colors.grey)),
+              Text('Relatório de Atividades', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+              Text('Selecione o Ano', style: TextStyle(fontSize: 14, color: Colors.grey)),
             ],
           ),
         ],
@@ -80,78 +77,47 @@ class _DiaryViewState extends State<DiaryView> {
     );
   }
 
-  Widget _buildTimelineHeader() {
-    return const Align(
-      alignment: Alignment.centerLeft,
-      child: Text(
-        'Atividades de Hoje',
-        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
-      ),
-    );
-  }
-
-  // Construção da Timeline
-  Widget _buildTimelineList() {
+  // Lista de anos para seleção
+  Widget _buildYearsList() {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: _entries.length,
+      itemCount: _years.length,
       itemBuilder: (context, index) {
-        final entry = _entries[index];
-        return IntrinsicHeight(
-          child: Row(
-            children: [
-              // Coluna da Esquerda: Ícone e Linha Conectora
-              Column(
+        final yearEntry = _years[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 15),
+          child: InkWell(
+            onTap: () {
+              // Navegaria para a tela de timeline que criamos antes
+            },
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+              ),
+              child: Row(
                 children: [
                   Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(color: entry.color, shape: BoxShape.circle),
-                    child: Icon(entry.icon, color: Colors.white, size: 20),
-                  ),
-                  Expanded(
-                    child: Container(
-                      width: 2,
-                      color: index == _entries.length - 1 ? Colors.transparent : Colors.grey.withOpacity(0.2),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: yearEntry.iconColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(15),
                     ),
+                    child: Icon(yearEntry.icon, color: yearEntry.iconColor),
                   ),
+                  const SizedBox(width: 20),
+                  Text(
+                    yearEntry.year,
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF2D3142)),
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.chevron_right, color: Colors.grey),
                 ],
               ),
-              const SizedBox(width: 15),
-              // Coluna da Direita: Conteúdo
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              entry.title,
-                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              entry.description,
-                              style: TextStyle(fontSize: 13, color: Colors.grey[600]),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Text(
-                        entry.time,
-                        style: TextStyle(fontSize: 13, color: Colors.grey[500], fontWeight: FontWeight.w500),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         );
       },

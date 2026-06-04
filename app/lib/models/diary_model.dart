@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 
 class DiaryEntry {
-  final String title;
-  final String description;
-  final String time;
+  final String year;
   final IconData icon;
-  final Color color;
+  final Color iconColor;
 
   DiaryEntry({
-    required this.title,
-    required this.description,
-    required this.time,
-    required this.icon,
-    required this.color,
+    required this.year, 
+    required this.icon, 
+    required this.iconColor
   });
 }
