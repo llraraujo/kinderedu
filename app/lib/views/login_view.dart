@@ -64,10 +64,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children:  [
                       Icon(Icons.auto_stories_outlined, size: 40),
-                      SizedBox(height: 8),
-                      Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         'KINDER EDU',
                         style: TextStyle(
                           fontSize: 12,

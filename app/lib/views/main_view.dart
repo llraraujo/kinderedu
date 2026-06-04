@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:kinderedu/views/chat_view.dart';
 import 'package:kinderedu/views/diary_tab_navigator.dart';
 import 'package:kinderedu/views/photo_tab_navigator.dart';
 import 'package:kinderedu/views/profile_view.dart';
@@ -19,7 +18,6 @@ class _MainViewState extends State<MainView> {
   final List<Widget> _views = [
     const DashboardView(), // 0: Hoje
     const DiaryTabNavigator(),  // 1: Diário
-    const ChatView(),   // 2: Chat
     const PhotoTabNavigator(), // 3: Fotos
     const ProfileView(), // 4: Perfil
   ];
@@ -52,10 +50,6 @@ class _MainViewState extends State<MainView> {
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today_outlined), 
           label: 'Diário'
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline), 
-          label: 'Chat'
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.photo_library_outlined), 

@@ -10,12 +10,12 @@ class DiaryController {
   List<DiaryEntry> getAvailableYears() {
     return [
       DiaryEntry(
-        year: 2025,
+        year: 2026,
         icon: Icons.calendar_month_outlined,
         iconColor: Colors.indigo,
       ),
       DiaryEntry(
-        year: 2024,
+        year: 2025,
         icon: Icons.calendar_month_outlined,
         iconColor: Colors.indigo,
       ),

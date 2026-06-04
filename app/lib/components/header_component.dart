@@ -22,7 +22,7 @@ Widget header(ChildProfile profile) {
             children: [
               CircleAvatar(
                 radius: 28,
-                backgroundImage: NetworkImage(_profile.imageUrl),
+                backgroundImage: AssetImage(_profile.imageUrl),
               ),
               const SizedBox(width: 12),
               Expanded(

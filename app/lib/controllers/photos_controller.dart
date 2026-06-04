@@ -25,7 +25,7 @@ class PhotosController {
 
     List<PhotoMonth>? getAvailableMonths(int year) {
     Map<int, List<PhotoMonth>> yearMonths = {
-      2025: [
+      2026: [
       PhotoMonth(
         month: "Novembro",
         icon: Icons.image,
@@ -37,7 +37,7 @@ class PhotosController {
         iconColor: Colors.pinkAccent,
       )],
 
-      2024: [
+      2025: [
       PhotoMonth(
         month: "Janeiro",
         icon: Icons.image,
