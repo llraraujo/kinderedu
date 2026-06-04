@@ -17,13 +17,16 @@ class ProfileMenuOption {
 
 class UserProfile {
   final String name;
+  final String cpf;
   final String role;
   final String email;
+
   final String phone;
   final String imageUrl;
 
   UserProfile({
     required this.name,
+    required this.cpf,
     required this.role,
     required this.email,
     required this.phone,
@@ -50,5 +53,15 @@ class EmergencyContact {
   EmergencyContact({
     required this.name,
     required this.phone,
+  });
+}
+
+class ChildHealthInfo {
+  final String allergies;
+  final String medications;
+
+  ChildHealthInfo({
+    required this.allergies,
+    required this.medications,
   });
 }

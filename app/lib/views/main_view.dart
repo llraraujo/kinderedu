@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kinderedu/views/chat_view.dart';
 import 'package:kinderedu/views/diary_tab_navigator.dart';
 import 'package:kinderedu/views/photo_tab_navigator.dart';
-import 'package:kinderedu/views/photos_view.dart';
 import 'package:kinderedu/views/profile_view.dart';
 import 'dashboard_view.dart';
-import 'diary_view.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key? key}) : super(key: key);
