@@ -19,7 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _cpf = TextEditingController();
   final TextEditingController _senha = TextEditingController();
   final maskCpf = MaskTextInputFormatter(mask: "###.###.###-##", filter: {"#": RegExp(r'[0-9]')});
-  bool isEducador = true; // Define qual aba está selecionada
+  bool isProfessor = true; // Define qual aba está selecionada
   bool obscurePassword = true;
   bool rememberMe = false;
   String _msgExisteUsuario = "";
@@ -107,14 +107,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   roleButton(
                     title: 'Responsável',
-                    isSelected: !isEducador,
-                    onTap: () => setState(() => isEducador = false),
+                    isSelected: !isProfessor,
+                    onTap: () => setState(() => isProfessor = false),
                   ),
                   const SizedBox(width: 12),
                   roleButton(
-                    title: 'Educador',
-                    isSelected: isEducador,
-                    onTap: () => setState(() => isEducador = true),
+                    title: 'Professor',
+                    isSelected: isProfessor,
+                    onTap: () => setState(() => isProfessor = true),
                   ),
                 ],
               ),
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 inputFormatters: [maskCpf],
                 decoration: InputDecoration(
-                label: Text(isEducador ? 'CPF do educador' : 'CPF do Responsável'),
+                label: Text(isProfessor ? 'CPF do Professor' : 'CPF do Responsável'),
                 hintText: '000.000.000-00',
                 prefixIcon: Icon(Icons.person_outline)
                 ),
