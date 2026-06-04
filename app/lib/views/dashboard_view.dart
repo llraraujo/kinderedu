@@ -58,8 +58,6 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   const SizedBox(height: 20),
                   _buildActivitiesGrid(),
-                  const SizedBox(height: 20),
-                  _buildStatusCard(),
                 ],
               ),
             ),
@@ -136,65 +134,5 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _buildStatusCard() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: const Icon(Icons.trending_up, color: Colors.green, size: 20),
-              ),
-              const SizedBox(width: 12),
-              const Text(
-                'Status Atual',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF2D3142),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          RichText(
-            text: TextSpan(
-              style: const TextStyle(fontSize: 15, color: Color(0xFF2D3142)),
-              children: [
-                TextSpan(text: '${_profile.name} está '),
-                const TextSpan(
-                  text: 'acordada e brincando',
-                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.w600),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Última atualização há 15 minutos',
-            style: TextStyle(fontSize: 12, color: Colors.grey[500]),
-          ),
-        ],
-      ),
-    );
-  }
 
 }
