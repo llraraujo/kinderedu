@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router'; // 1. ALTERAÇÃO: Importar o Router
 import { AuthService } from './auth.service';
 
 @Component({
@@ -13,6 +14,7 @@ import { AuthService } from './auth.service';
 export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private router = inject(Router); // 2. ALTERAÇÃO: Injetar o Router
 
   loginForm: FormGroup;
   isPasswordVisible: boolean = false;
@@ -38,13 +40,16 @@ export class LoginComponent {
     this.isLoading = true;
     this.authService.login(this.loginForm.value).subscribe({
       next: (res) => {
-        // Redirecionar para o painel principal do sistema
-        console.log('Login realizado com sucesso', res);
+        // 3. ALTERAÇÃO: Salvar o token e redirecionar
+        localStorage.setItem('token', res.token); // Alimenta o AuthGuard
+
+        this.router.navigate(['/dashboard']); // Navega para a rota principal do Dashboard
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Erro ao realizar login', err);
         this.isLoading = false;
+        // Aqui você pode adicionar um serviço de notificação (Toast/Alert) para o usuário
       }
     });
   }
