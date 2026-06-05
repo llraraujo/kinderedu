@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kinderedu/models/login_model.dart';
 import 'package:kinderedu/views/login_view.dart';
+import 'package:kinderedu/views/registration_view.dart';
 import '../controllers/professor_dashboard_controller.dart';
 import '../models/professor_dashboard_model.dart';
 
@@ -172,7 +173,9 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                     label: 'Registrar',
                     icon: Icons.add,
                     color: const Color(0xFF5A45FF), // Roxo/Azul
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  RegistrationView(studentId: student.id, studentName: student.name,)));
+                    },
                   ),
                   const SizedBox(width: 8),
                   _buildActionButton(
