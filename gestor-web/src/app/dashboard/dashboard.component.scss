@@ -1,0 +1,123 @@
+$bg-color: #fcfcfc;
+$text-main: #333;
+$text-muted: #888;
+$white: #ffffff;
+
+.dashboard-wrapper {
+  background-color: $bg-color;
+  min-height: 100vh;
+}
+
+.main-header {
+  background: $white;
+  padding: 1rem 4rem;
+  border-bottom: 1px solid #eee;
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .brand-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+
+      h1 { font-size: 1.1rem; margin: 0; font-weight: 600; color: #444; }
+      p { font-size: 0.85rem; margin: 0; color: $text-muted; }
+    }
+
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: none;
+      border: none;
+      color: #666;
+      cursor: pointer;
+      font-weight: 500;
+      &:hover { color: #cc3300; }
+    }
+  }
+}
+
+.dashboard-container {
+  padding: 3rem 4rem;
+  max-width: 1400px;
+  margin: 0 auto;
+
+  .welcome-section {
+    margin-bottom: 2.5rem;
+    h2 { font-size: 1.8rem; margin-bottom: 0.3rem; }
+    p { color: $text-muted; margin: 0; }
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 4rem;
+
+  .stat-card {
+    background: $white;
+    padding: 2rem;
+    border-radius: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    border: 1px solid #f0f0f0;
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      label { font-size: 0.9rem; color: $text-muted; margin-bottom: 0.5rem; }
+      .count { font-size: 2.5rem; font-weight: 500; color: $text-main; }
+    }
+
+    .icon-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span { font-size: 2rem; color: $white; }
+    }
+
+    &.blue .icon-box { background-color: #1c5af1; }
+    &.green .icon-box { background-color: #00d084; }
+    &.purple .icon-box { background-color: #9b51e0; }
+  }
+}
+
+.actions-section {
+  h3 { font-size: 1.1rem; color: #444; margin-bottom: 1.5rem; }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      padding: 1.2rem;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+
+      span { font-size: 1.4rem; }
+
+      &.blue-alt { background: #f0f4ff; color: #1c5af1; &:hover { border-color: #1c5af1; } }
+      &.green-alt { background: #e6faf2; color: #00d084; &:hover { border-color: #00d084; } }
+      &.purple-alt { background: #f5edfc; color: #9b51e0; &:hover { border-color: #9b51e0; } }
+      &.gray-alt { background: #f2f2f7; color: #5856d6; &:hover { border-color: #5856d6; } }
+    }
+  }
+}
