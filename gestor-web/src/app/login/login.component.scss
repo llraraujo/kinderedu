@@ -1,0 +1,240 @@
+// Variáveis de Cores (idealmente estariam em um arquivo styles.scss global)
+$primary-blue: #1C5AF1;
+$bg-blue-gradient: linear-gradient(135deg, #184be0 0%, #1a56f0 100%);
+$text-light: #ffffff;
+$text-dark: #1a1a1a;
+$text-muted: #6c757d;
+$border-color: #e0e0e0;
+$bg-gray: #f8f9fa;
+
+.login-container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif; // Assumindo uma fonte limpa como Inter ou Roboto
+}
+
+/* --- Lado Esquerdo (Branding) --- */
+.branding-panel {
+  flex: 1;
+  background: $bg-blue-gradient;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: $text-light;
+
+  .branding-content {
+    max-width: 480px;
+    text-align: center;
+  }
+
+  .logo-container {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    display: inline-block;
+    margin-bottom: 2rem;
+
+    .logo {
+      width: 120px;
+      height: auto;
+    }
+  }
+
+  .brand-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .brand-subtitle {
+    font-size: 1rem;
+    line-height: 1.5;
+    opacity: 0.9;
+    margin-bottom: 3rem;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .icon {
+        font-size: 2rem;
+      }
+
+      span:last-child {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+/* --- Lado Direito (Autenticação) --- */
+.auth-panel {
+  flex: 1;
+  background-color: $bg-gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  .auth-card {
+    background: #fff;
+    width: 100%;
+    max-width: 450px;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  }
+
+  .auth-header {
+    margin-bottom: 2rem;
+
+    h2 {
+      color: $text-dark;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: $text-muted;
+      font-size: 0.9rem;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: $text-dark;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+
+      .prefix-icon {
+        position: absolute;
+        left: 1rem;
+        color: $text-muted;
+        font-size: 1.25rem;
+      }
+
+      input {
+        width: 100%;
+        padding: 0.75rem 1rem 0.75rem 3rem; // Espaço para o ícone da esquerda
+      border: 1px solid $border-color;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.2s;
+        outline: none;
+
+        &:focus {
+          border-color: $primary-blue;
+        }
+
+        &.is-invalid {
+          border-color: #dc3545;
+        }
+      }
+
+      .toggle-password {
+        position: absolute;
+        right: 1rem;
+        background: none;
+        border: none;
+        color: $text-muted;
+        cursor: pointer;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: $text-dark;
+        }
+      }
+    }
+  }
+
+  .btn-primary {
+    width: 100%;
+    background-color: $primary-blue;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.875rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 0.5rem;
+
+    &:hover {
+      background-color: darken($primary-blue, 10%);
+    }
+
+    &:disabled {
+      background-color: lighten($primary-blue, 20%);
+      cursor: not-allowed;
+    }
+  }
+
+  .auth-links {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+
+    a {
+      color: $primary-blue;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .divider {
+      color: $border-color;
+      margin: 0 1rem;
+    }
+  }
+
+  .auth-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: $text-muted;
+  }
+
+  .demo-credentials {
+    position: absolute;
+    bottom: 2rem;
+    color: $text-muted;
+    font-size: 0.85rem;
+  }
+}
