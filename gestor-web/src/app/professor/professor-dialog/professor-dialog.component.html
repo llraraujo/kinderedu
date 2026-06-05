@@ -1,0 +1,50 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2>Novo Professor</h2>
+    </header>
+
+    <form [formGroup]="professorForm" (ngSubmit)="onSubmit()" class="modal-form">
+
+      <div class="form-group">
+        <label for="nomeCompleto">Nome completo</label>
+        <input id="nomeCompleto" type="text" formControlName="nomeCompleto" placeholder="Ex: Maria da Silva"
+               [class.is-invalid]="professorForm.get('nomeCompleto')?.invalid && professorForm.get('nomeCompleto')?.touched">
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" formControlName="email" placeholder="professor@escola.com"
+               [class.is-invalid]="professorForm.get('email')?.invalid && professorForm.get('email')?.touched">
+      </div>
+
+      <div class="form-group">
+        <label for="cpf">CPF</label>
+        <input id="cpf" type="text" formControlName="cpf" placeholder="000.000.000-00"
+               [class.is-invalid]="professorForm.get('cpf')?.invalid && professorForm.get('cpf')?.touched">
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" type="text" formControlName="telefone" placeholder="(00) 00000-0000"
+               [class.is-invalid]="professorForm.get('telefone')?.invalid && professorForm.get('telefone')?.touched">
+      </div>
+
+      <div class="form-group">
+        <label for="turmaId">Turma</label>
+        <select id="turmaId" formControlName="turmaId"
+                [class.is-invalid]="professorForm.get('turmaId')?.invalid && professorForm.get('turmaId')?.touched">
+          <option value="" disabled selected>Selecione uma turma</option>
+          @for (turma of turmas; track turma.id) {
+            <option [value]="turma.id">{{ turma.nome }}</option>
+          }
+        </select>
+      </div>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="professorForm.invalid">Cadastrar</button>
+      </footer>
+    </form>
+  </div>
+</div>

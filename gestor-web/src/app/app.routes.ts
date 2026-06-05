@@ -27,7 +27,7 @@ export const routes: Routes = [
   {
     path: 'professores',
     canActivate: [authGuard],
-    loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent)
+    loadComponent: () => import('./professor/professores/professores.component').then(m => m.ProfessoresComponent)
   },
   {
     path: 'alunos',
