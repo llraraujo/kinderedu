@@ -1,0 +1,49 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2>Nova Turma</h2>
+    </header>
+
+    <form [formGroup]="turmaForm" (ngSubmit)="onSubmit()" class="modal-form">
+
+      <div class="form-group">
+        <label for="nome">Nome da Turma</label>
+        <input id="nome" type="text" formControlName="nome" placeholder="Ex: Jardim I - A">
+      </div>
+
+      <div class="form-group">
+        <label for="anoSerie">Ano/Série</label>
+        <input id="anoSerie" type="text" formControlName="anoSerie" placeholder="Ex: Jardim I">
+      </div>
+
+      <div class="form-group">
+        <label for="turno">Turno</label>
+        <select id="turno" formControlName="turno">
+          <option value="Manhã">Manhã</option>
+          <option value="Tarde">Tarde</option>
+          <option value="Integral">Integral</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="professorId">Professor</label>
+        <select id="professorId" formControlName="professorId">
+          <option value="" disabled selected>Selecione um professor</option>
+          @for (prof of professores; track prof.id) {
+            <option [value]="prof.id">{{ prof.nome }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="capacidade">Capacidade</label>
+        <input id="capacidade" type="number" formControlName="capacidade">
+      </div>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="turmaForm.invalid">Cadastrar</button>
+      </footer>
+    </form>
+  </div>
+</div>
