@@ -37,7 +37,7 @@ export const routes: Routes = [
   {
     path: 'relatorios',
     canActivate: [authGuard],
-    loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent)
+    loadComponent: () => import('./relatorio/relatorios.component').then(m => m.RelatoriosComponent)
   },
   { path: '**', redirectTo: 'login' }
 ];

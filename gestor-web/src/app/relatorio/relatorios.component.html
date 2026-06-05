@@ -1,0 +1,155 @@
+<div class="page-container">
+
+  <nav class="top-nav">
+    <a routerLink="/dashboard" class="back-link">
+      <span class="material-icons-outlined">arrow_back</span>
+    </a>
+    <span class="material-icons-outlined page-icon">description</span>
+    <span class="page-title">Relatórios</span>
+  </nav>
+
+  <main class="reports-container">
+
+    <div class="report-card theme-blue">
+      <div class="card-header">
+        <div class="info-group">
+          <div class="icon-wrapper">
+            <span class="material-icons-outlined">menu_book</span>
+          </div>
+          <div class="text-wrapper">
+            <h3>Relatório de Turmas</h3>
+            <p>{{ turmas.length }} turma(s) cadastrada(s)</p>
+          </div>
+        </div>
+
+        <div class="action-group">
+          <button class="btn-export" (click)="exportar('turmas')">
+            <span class="material-icons-outlined">download</span> Exportar
+          </button>
+          <button class="btn-toggle" (click)="togglePainel('turmas')">
+            <span class="material-icons-outlined">
+              {{ paineis.turmas ? 'expand_less' : 'expand_more' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      @if (paineis.turmas) {
+        <div class="card-body">
+          @if (turmas.length === 0) {
+            <p class="empty-message">Nenhuma turma cadastrada.</p>
+          } @else {
+            <ul class="checkbox-list">
+              @for (turma of turmas; track turma.id) {
+                <li>
+                  <label class="checkbox-container">
+                    <input type="checkbox"
+                           [checked]="selecoes.turmas.has(turma.id!)"
+                           (change)="toggleSelecao('turmas', turma.id!)">
+                    <span class="checkmark"></span>
+                    {{ turma.nome }} - {{ turma.turno }}
+                  </label>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="report-card theme-purple">
+      <div class="card-header">
+        <div class="info-group">
+          <div class="icon-wrapper">
+            <span class="material-icons-outlined">groups</span>
+          </div>
+          <div class="text-wrapper">
+            <h3>Relatório de Alunos e Responsáveis</h3>
+            <p>{{ alunos.length }} aluno(s) cadastrado(s)</p>
+          </div>
+        </div>
+
+        <div class="action-group">
+          <button class="btn-export" (click)="exportar('alunos')">
+            <span class="material-icons-outlined">download</span> Exportar
+          </button>
+          <button class="btn-toggle" (click)="togglePainel('alunos')">
+            <span class="material-icons-outlined">
+              {{ paineis.alunos ? 'expand_less' : 'expand_more' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      @if (paineis.alunos) {
+        <div class="card-body">
+          @if (alunos.length === 0) {
+            <p class="empty-message">Nenhum aluno cadastrado.</p>
+          } @else {
+            <ul class="checkbox-list">
+              @for (aluno of alunos; track aluno.id) {
+                <li>
+                  <label class="checkbox-container">
+                    <input type="checkbox"
+                           [checked]="selecoes.alunos.has(aluno.id!)"
+                           (change)="toggleSelecao('alunos', aluno.id!)">
+                    <span class="checkmark"></span>
+                    {{ aluno.nomeCompleto }} (Matrícula: {{ aluno.matricula }})
+                  </label>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="report-card theme-green">
+      <div class="card-header">
+        <div class="info-group">
+          <div class="icon-wrapper">
+            <span class="material-icons-outlined">school</span>
+          </div>
+          <div class="text-wrapper">
+            <h3>Relatório de Professores</h3>
+            <p>{{ professores.length }} professor(es) cadastrado(s)</p>
+          </div>
+        </div>
+
+        <div class="action-group">
+          <button class="btn-export" (click)="exportar('professores')">
+            <span class="material-icons-outlined">download</span> Exportar
+          </button>
+          <button class="btn-toggle" (click)="togglePainel('professores')">
+            <span class="material-icons-outlined">
+              {{ paineis.professores ? 'expand_less' : 'expand_more' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      @if (paineis.professores) {
+        <div class="card-body">
+          @if (professores.length === 0) {
+            <p class="empty-message">Nenhum professor cadastrado.</p>
+          } @else {
+            <ul class="checkbox-list">
+              @for (prof of professores; track prof.id) {
+                <li>
+                  <label class="checkbox-container">
+                    <input type="checkbox"
+                           [checked]="selecoes.professores.has(prof.id!)"
+                           (change)="toggleSelecao('professores', prof.id!)">
+                    <span class="checkmark"></span>
+                    {{ prof.nomeCompleto }} (CPF: {{ prof.cpf }})
+                  </label>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </div>
+
+  </main>
+</div>
