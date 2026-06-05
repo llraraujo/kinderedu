@@ -1,27 +1,31 @@
+
 import 'package:flutter/material.dart';
 import 'package:kinderedu/components/header_component.dart';
+import 'package:kinderedu/controllers/photos_controller.dart';
 import 'package:kinderedu/models/header_model.dart';
-import 'package:kinderedu/views/diary_month_view.dart';
-import '../controllers/diary_controller.dart';
-import '../models/diary_model.dart';
+import 'package:kinderedu/models/photo_model.dart';
+import 'package:kinderedu/views/photo_day_view.dart';
 
-class DiaryView extends StatefulWidget {
-  const DiaryView({Key? key}) : super(key: key);
+class PhotoMonthView extends StatefulWidget {
+  const PhotoMonthView({Key? key, required this.year, required this.profile}) : super(key: key);
+  final ChildProfile profile;
+  final int year;
 
   @override
-  State<DiaryView> createState() => _DiaryYearViewState();
+  State<PhotoMonthView> createState() => _DiaryYearViewState();
 }
 
-class _DiaryYearViewState extends State<DiaryView> {
-  final DiaryController _controller = DiaryController();
-  late List<DiaryEntry> _years;
-  late ChildProfile _profile; 
+class _DiaryYearViewState extends State<PhotoMonthView> {
+  int _currentIndex = 0;
+  final PhotosController _controller = PhotosController();
+  late int _year;
+  late List<PhotoMonth>_months;
 
-  @override
+@override
   void initState() {
     super.initState();
-    _years = _controller.getAvailableYears();
-    _profile = _controller.getChildProfile();
+    _year = widget.year;
+    _months = _controller.getAvailableMonths(_year) ?? [];
   }
 
   @override
@@ -30,7 +34,7 @@ class _DiaryYearViewState extends State<DiaryView> {
       backgroundColor: const Color(0xFFF8F9FE), // Fundo levemente azulado/cinza
       body: Column(
         children: [
-          header(_profile),
+          header(widget.profile),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20.0),
@@ -38,7 +42,7 @@ class _DiaryYearViewState extends State<DiaryView> {
                 children: [
                   _buildTitleCard(),
                   const SizedBox(height: 25),
-                  _buildYearsList(),
+                  _buildMonthsListList(),
                 ],
               ),
             ),
@@ -60,17 +64,21 @@ class _DiaryYearViewState extends State<DiaryView> {
       ),
       child: Row(
         children: [
+           IconButton(
+            icon: const Icon(Icons.chevron_left, color: Colors.grey),
+            onPressed: () => Navigator.pop(context),
+          ),
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(color: Colors.blue.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
-            child: const Icon(Icons.description_outlined, color: Colors.blue),
+            child: const Icon(Icons.image_outlined, color: Colors.blue),
           ),
           const SizedBox(width: 15),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Relatório de Atividades', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
-              Text('Selecione o Ano', style: TextStyle(fontSize: 14, color: Colors.grey)),
+              const Text('Galeria de Fotos', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+              Text(_year.toString(), style: TextStyle(fontSize: 14, color: Colors.grey)),
             ],
           ),
         ],
@@ -78,20 +86,19 @@ class _DiaryYearViewState extends State<DiaryView> {
     );
   }
 
-  // Lista de anos para seleção
-  Widget _buildYearsList() {
+  Widget _buildMonthsListList() {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: _years.length,
+      itemCount: _months.length,
       itemBuilder: (context, index) {
-        final yearEntry = _years[index];
+        final monthEntry = _months[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 15),
           child: InkWell(
             onTap: () {
-              // Navegaria para a tela de meses para o ano em questão
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryMonthView(year: yearEntry.year, profile: _profile)));
+              // Navegaria para a tela de timeline que criamos antes
+              Navigator.push(context, MaterialPageRoute(builder: (context) => PhotoDayView(month: monthEntry.month, year: _year)));
             },
             child: Container(
               padding: const EdgeInsets.all(20),
@@ -105,14 +112,14 @@ class _DiaryYearViewState extends State<DiaryView> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: yearEntry.iconColor.withOpacity(0.1),
+                      color: monthEntry.iconColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Icon(yearEntry.icon, color: yearEntry.iconColor),
+                    child: Icon(monthEntry.icon, color: monthEntry.iconColor),
                   ),
                   const SizedBox(width: 20),
                   Text(
-                    yearEntry.year.toString(),
+                    monthEntry.month,
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF2D3142)),
                   ),
                   const Spacer(),

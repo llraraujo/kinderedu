@@ -13,8 +13,8 @@ class ChildProfile {
 }
 
 var childProfileHeader = ChildProfile(
-      name: 'Ana Clara',
-      age: '8 meses',
-      imageUrl: 'https://via.placeholder.com/150', // Substitua pela URL da foto
-      currentDate: '27 de Novembro, 2025 • Quarta-feira',
+      name: 'Maria Laura',
+      age: '2 anos',
+      imageUrl: 'images/perfil.jpg', // Substitua pela URL da foto
+      currentDate: '27 de Maio, 2026 • Quarta-feira',
 );

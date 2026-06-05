@@ -22,7 +22,7 @@ Widget header(ChildProfile profile) {
             children: [
               CircleAvatar(
                 radius: 28,
-                backgroundImage: NetworkImage(_profile.imageUrl),
+                backgroundImage: AssetImage(_profile.imageUrl),
               ),
               const SizedBox(width: 12),
               Expanded(
@@ -47,9 +47,6 @@ Widget header(ChildProfile profile) {
                   ],
                 ),
               ),
-              _buildIconButton(Icons.notifications_outlined, const Color(0x33FFFFFF)),
-              const SizedBox(width: 10),
-              _buildIconButton(Icons.phone, Colors.redAccent),
             ],
           ),
           const SizedBox(height: 20),
@@ -61,19 +58,6 @@ Widget header(ChildProfile profile) {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildIconButton(IconData icon, Color bgColor) {
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: Colors.white),
-        onPressed: () {},
       ),
     );
   }

@@ -12,14 +12,6 @@ class DashboardController {
   List<ActivitySummary> getTodayActivities() {
     return [
       ActivitySummary(
-        title: 'Mamadas',
-        count: 3,
-        lastTime: '14:30',
-        icon: Icons.local_drink, // Ícone aproximado
-        primaryColor: Colors.blueAccent,
-        backgroundColor: Colors.blue.withOpacity(0.1),
-      ),
-      ActivitySummary(
         title: 'Sonecas',
         count: 2,
         lastTime: '13:00',
@@ -28,7 +20,7 @@ class DashboardController {
         backgroundColor: Colors.purple.withOpacity(0.1),
       ),
       ActivitySummary(
-        title: 'Fraldas',
+        title: 'Higiene',
         count: 5,
         lastTime: '11:30',
         icon: Icons.child_care,
@@ -36,7 +28,7 @@ class DashboardController {
         backgroundColor: Colors.green.withOpacity(0.1),
       ),
       ActivitySummary(
-        title: 'Refeições',
+        title: 'Alimentação',
         count: 2,
         lastTime: '12:00',
         icon: Icons.restaurant,

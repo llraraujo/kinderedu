@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:kinderedu/views/chat_view.dart';
-import 'package:kinderedu/views/photos_view.dart';
+import 'package:kinderedu/models/login_model.dart';
+import 'package:kinderedu/views/diary_tab_navigator.dart';
+import 'package:kinderedu/views/photo_tab_navigator.dart';
 import 'package:kinderedu/views/profile_view.dart';
 import 'dashboard_view.dart';
-import 'diary_view.dart';
 
 class MainView extends StatefulWidget {
-  const MainView({Key? key}) : super(key: key);
+  const MainView({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<MainView> createState() => _MainViewState();
@@ -18,9 +19,8 @@ class _MainViewState extends State<MainView> {
   // Lista que mapeia o índice da aba para a respectiva View
   final List<Widget> _views = [
     const DashboardView(), // 0: Hoje
-    const DiaryView(),  // 1: Diário
-    const ChatView(),   // 2: Chat
-    const PhotosView(), // 3: Fotos
+    const DiaryTabNavigator(),  // 1: Diário
+    const PhotoTabNavigator(), // 3: Fotos
     const ProfileView(), // 4: Perfil
   ];
 
@@ -52,10 +52,6 @@ class _MainViewState extends State<MainView> {
         BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today_outlined), 
           label: 'Diário'
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline), 
-          label: 'Chat'
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.photo_library_outlined), 

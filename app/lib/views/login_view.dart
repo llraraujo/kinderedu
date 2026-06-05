@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kinderedu/views/professor_dashboard_view.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:kinderedu/components/role_button_component.dart';
 import 'package:kinderedu/controllers/login_controller.dart';
@@ -19,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _cpf = TextEditingController();
   final TextEditingController _senha = TextEditingController();
   final maskCpf = MaskTextInputFormatter(mask: "###.###.###-##", filter: {"#": RegExp(r'[0-9]')});
-  bool isEducador = true; // Define qual aba está selecionada
+  bool isProfessor = true; // Define qual aba está selecionada
   bool obscurePassword = true;
   bool rememberMe = false;
   String _msgExisteUsuario = "";
@@ -64,10 +65,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children:  [
                       Icon(Icons.auto_stories_outlined, size: 40),
-                      SizedBox(height: 8),
-                      Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         'KINDER EDU',
                         style: TextStyle(
                           fontSize: 12,
@@ -107,14 +108,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   roleButton(
                     title: 'Responsável',
-                    isSelected: !isEducador,
-                    onTap: () => setState(() => isEducador = false),
+                    isSelected: !isProfessor,
+                    onTap: () => setState(() => isProfessor = false),
                   ),
                   const SizedBox(width: 12),
                   roleButton(
-                    title: 'Educador',
-                    isSelected: isEducador,
-                    onTap: () => setState(() => isEducador = true),
+                    title: 'Professor',
+                    isSelected: isProfessor,
+                    onTap: () => setState(() => isProfessor = true),
                   ),
                 ],
               ),
@@ -124,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 inputFormatters: [maskCpf],
                 decoration: InputDecoration(
-                label: Text(isEducador ? 'CPF do educador' : 'CPF do Responsável'),
+                label: Text(isProfessor ? 'CPF do Professor' : 'CPF do Responsável'),
                 hintText: '000.000.000-00',
                 prefixIcon: Icon(Icons.person_outline)
                 ),
@@ -205,15 +206,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   var user = _controller.getUsuariosCadastrados().firstWhere(
                     (user) => user.cpf == _cpf.text && user.senha == _senha.text,
-                    orElse: () =>  User(cpf:"",senha:"")
+                    orElse: () =>  User(cpf:"",senha:"", role: "")
                   );
                   if(user.cpf.isNotEmpty && user.senha.isNotEmpty){
                     _limparCampos();
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const MainView()));
-                    return;
+                    if(isProfessor && user.role == "PROFESSOR"){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfessorDashboardView(user: user)));
+                      return;
+                    }
+                    if(!isProfessor && user.role == "RESPONSAVEL"){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainView(user: user)));
+                      return;
+                    }
                   }
                   setState(() {
-                     _msgExisteUsuario = "usuário/senha não existe na base de dados.";
+                     _msgExisteUsuario = "cpf ou senha inválido.";
                   });                 
                 },
                 style: ElevatedButton.styleFrom(
