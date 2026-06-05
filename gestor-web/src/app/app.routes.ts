@@ -32,7 +32,7 @@ export const routes: Routes = [
   {
     path: 'alunos',
     canActivate: [authGuard],
-    loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent)
+    loadComponent: () => import('./aluno/alunos/alunos.component').then(m => m.AlunosComponent)
   },
   {
     path: 'relatorios',
