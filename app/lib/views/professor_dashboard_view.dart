@@ -4,6 +4,7 @@ import 'package:kinderedu/models/login_model.dart';
 import 'package:kinderedu/views/add_photo_view.dart';
 import 'package:kinderedu/views/login_view.dart';
 import 'package:kinderedu/views/registration_view.dart';
+import 'package:kinderedu/views/student_file_view.dart';
 import '../controllers/professor_dashboard_controller.dart';
 import '../models/professor_dashboard_model.dart';
 
@@ -194,7 +195,9 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                     label: 'Ficha',
                     icon: Icons.description_outlined,
                     color: const Color(0xFF00C4A7), // Verde/Teal
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  StudentFileView(studentId: student.id, studentName: student.name,)));
+                    },
                   ),
                 ],
               ),
