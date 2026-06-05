@@ -18,13 +18,26 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
-    children: [
-      // Sub-rotas para futuras implementações
-      { path: 'turmas', loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent) },
-      { path: 'professores', loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent) },
-      { path: 'alunos', loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent) },
-      { path: 'relatorios', loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent) },
-    ]
+  },
+  {
+    path: 'turmas',
+    canActivate: [authGuard],
+    loadComponent: () => import('./turma/turmas/turmas.component').then(m => m.TurmasComponent)
+  },
+  {
+    path: 'professores',
+    canActivate: [authGuard],
+    loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent)
+  },
+  {
+    path: 'alunos',
+    canActivate: [authGuard],
+    loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent)
+  },
+  {
+    path: 'relatorios',
+    canActivate: [authGuard],
+    loadComponent: () => import('./placeholder.component').then(m => m.PlaceholderComponent)
   },
   { path: '**', redirectTo: 'login' }
 ];
