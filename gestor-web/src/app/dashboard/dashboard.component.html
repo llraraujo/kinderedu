@@ -1,0 +1,73 @@
+<div class="dashboard-wrapper">
+  <header class="main-header">
+    <div class="header-content">
+      <div class="brand-info">
+        <img src="assets/logo-small.png" alt="Logo" class="mini-logo">
+        <div class="text">
+          <h1>Kinder Edu</h1>
+          <p>Agenda Virtual para Berçários</p>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <span class="material-icons-outlined">logout</span> Sair
+      </button>
+    </div>
+  </header>
+
+  <main class="dashboard-container">
+    <section class="welcome-section">
+      <h2>Dashboard</h2>
+      <p>Visão geral do sistema</p>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card blue">
+        <div class="info">
+          <label>Turmas</label>
+          <span class="count">{{ stats.turmasCount }}</span>
+        </div>
+        <div class="icon-box">
+          <span class="material-icons-outlined">menu_book</span>
+        </div>
+      </div>
+
+      <div class="stat-card green">
+        <div class="info">
+          <label>Professores</label>
+          <span class="count">{{ stats.professoresCount }}</span>
+        </div>
+        <div class="icon-box">
+          <span class="material-icons-outlined">school</span>
+        </div>
+      </div>
+
+      <div class="stat-card purple">
+        <div class="info">
+          <label>Alunos</label>
+          <span class="count">{{ stats.alunosCount }}</span>
+        </div>
+        <div class="icon-box">
+          <span class="material-icons-outlined">groups</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="actions-section">
+      <h3>Ações Rápidas</h3>
+      <div class="actions-grid">
+        <button class="action-btn blue-alt" (click)="navigateTo('turmas')">
+          <span class="material-icons-outlined">add_box</span> Nova Turma
+        </button>
+        <button class="action-btn green-alt" (click)="navigateTo('professores')">
+          <span class="material-icons-outlined">person_add_alt</span> Novo Professor
+        </button>
+        <button class="action-btn purple-alt" (click)="navigateTo('alunos')">
+          <span class="material-icons-outlined">person_add</span> Novo Aluno
+        </button>
+        <button class="action-btn gray-alt" (click)="navigateTo('relatorios')">
+          <span class="material-icons-outlined">description</span> Relatórios
+        </button>
+      </div>
+    </section>
+  </main>
+</div>

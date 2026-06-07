@@ -1,0 +1,100 @@
+<div class="login-container">
+
+  <aside class="branding-panel">
+    <div class="branding-content">
+      <div class="logo-container">
+        <img src="assets/logo-kinderedu.png" alt="Logo Kinder Edu" class="logo">
+      </div>
+
+      <h1 class="brand-title">Kinder Edu</h1>
+      <p class="brand-subtitle">
+        Agenda virtual completa para berçários. Gerencie turmas, professores, alunos e muito mais com facilidade.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="icon">📚</span>
+          <span>Turmas</span>
+        </div>
+        <div class="feature-card">
+          <span class="icon">👩‍🏫</span>
+          <span>Professores</span>
+        </div>
+        <div class="feature-card">
+          <span class="icon">👶</span>
+          <span>Alunos</span>
+        </div>
+        <div class="feature-card">
+          <span class="icon">📊</span>
+          <span>Relatórios</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="auth-panel">
+    <div class="auth-card">
+      <header class="auth-header">
+        <h2>Acesso ao sistema</h2>
+        <p>Entre com suas credenciais de gestor</p>
+      </header>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+
+        <div class="form-group">
+          <label for="email">E-mail</label>
+          <div class="input-wrapper">
+            <span class="material-icons prefix-icon"></span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="gestor@kinderedu.com"
+              [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+            >
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="senha">Senha</label>
+          <div class="input-wrapper">
+            <span class="material-icons prefix-icon"></span>
+            <input
+              id="senha"
+              [type]="isPasswordVisible ? 'text' : 'password'"
+              formControlName="senha"
+              placeholder="••••••"
+              [class.is-invalid]="loginForm.get('senha')?.invalid && loginForm.get('senha')?.touched"
+            >
+            <button
+              type="button"
+              class="toggle-password"
+              (click)="togglePasswordVisibility()"
+              aria-label="Alternar visibilidade da senha"
+            >
+              <span class="material-icons">{{ isPasswordVisible ? 'visibility_off' : 'visibility' }}</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" [disabled]="isLoading">
+          {{ isLoading ? 'Entrando...' : 'Entrar' }}
+        </button>
+
+        <div class="auth-links">
+          <a href="#">Esqueceu a senha?</a>
+          <span class="divider">|</span>
+          <a href="#">Contate-nos</a>
+        </div>
+      </form>
+
+      <footer class="auth-footer">
+        <p>Kinder Edu é um serviço pago. Para adquirir acesso, entre em contato.</p>
+      </footer>
+    </div>
+
+    <div class="demo-credentials">
+      Demo: gestor&#64;kinderedu.com / 123456
+    </div>
+  </main>
+</div>

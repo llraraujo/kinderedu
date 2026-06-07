@@ -1,0 +1,125 @@
+$primary-purple: #9000ff; // Ajustado para o tom violeta/roxo da imagem
+$border-color: #e0e0e0;
+$text-dark: #333;
+$text-muted: #666;
+$text-light-muted: #999;
+
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+// Para formulários maiores, adicionamos um max-height e overflow-y
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-out;
+
+  /* Custom Scrollbar para manter a elegância */
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+
+  .modal-header {
+    margin-bottom: 1rem;
+    h2 { font-size: 1.25rem; color: $text-dark; margin-bottom: 0.25rem; font-weight: 600; }
+    .subtitle { font-size: 0.85rem; color: $text-muted; }
+  }
+}
+
+/* O Segredo do Divisor com Linhas ao Lado */
+.section-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1.5rem 0 1rem;
+  color: $text-light-muted;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &::before, &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid $border-color;
+  }
+  &::before { margin-right: 0.75em; }
+  &::after { margin-left: 0.75em; }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus { border-color: $primary-purple; }
+  }
+}
+
+/* Layout de Duas Colunas para Inputs Menores */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  .col { flex: 1; }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  button {
+    flex: 1;
+    padding: 0.875rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel {
+    background: #fff;
+    border: 1px solid $border-color;
+    color: $text-dark;
+    &:hover { background: #f8f9fa; }
+  }
+
+  .btn-primary {
+    background: $primary-purple;
+    border: none;
+    color: #fff;
+    &:hover { background: darken($primary-purple, 10%); }
+    &:disabled { background: lighten($primary-purple, 20%); cursor: not-allowed; }
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

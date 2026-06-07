@@ -1,0 +1,42 @@
+<div class="page-container">
+
+  <nav class="top-nav">
+    <a routerLink="/dashboard" class="back-link">
+      <span class="material-icons-outlined">arrow_back</span>
+    </a>
+    <span class="material-icons-outlined page-icon">groups</span>
+    <span class="page-title">Alunos e Responsáveis</span>
+  </nav>
+
+  <header class="page-header">
+    <div class="header-info">
+      <p>{{ alunos.length }} aluno(s) cadastrado(s)</p>
+    </div>
+    <button class="btn-primary" (click)="openDialog()">
+      <span class="material-icons-outlined">add</span> Novo Aluno
+    </button>
+  </header>
+
+  <main class="content-area">
+
+    @if (!isLoading && alunos.length === 0) {
+      <div class="empty-state">
+        <span class="material-icons-outlined empty-icon">groups</span>
+        <h3>Nenhum aluno cadastrado</h3>
+        <p>Clique em "Novo Aluno" para começar</p>
+      </div>
+    }
+
+    @if (alunos.length > 0) {
+      <div class="alunos-grid">
+      </div>
+    }
+  </main>
+
+  @if (isModalOpen) {
+    <app-aluno-dialog
+      (closeDialog)="closeDialog()"
+      (saveAluno)="onSalvarAluno($event)">
+    </app-aluno-dialog>
+  }
+</div>

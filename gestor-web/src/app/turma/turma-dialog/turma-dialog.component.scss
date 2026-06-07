@@ -1,0 +1,91 @@
+$primary-blue: #1c5af1;
+$border-color: #e0e0e0;
+$text-dark: #333;
+$text-muted: #666;
+
+.modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  background: #fff;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.3s ease-out;
+
+  .modal-header h2 {
+    font-size: 1.25rem;
+    color: $text-dark;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+  }
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: $text-muted;
+  }
+
+  input, select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus { border-color: $primary-blue; }
+  }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+
+  button {
+    flex: 1;
+    padding: 0.875rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-cancel {
+    background: #fff;
+    border: 1px solid $border-color;
+    color: $text-dark;
+    &:hover { background: #f8f9fa; }
+  }
+
+  .btn-primary {
+    background: $primary-blue;
+    border: none;
+    color: #fff;
+    &:hover { background: darken($primary-blue, 10%); }
+    &:disabled { background: lighten($primary-blue, 20%); cursor: not-allowed; }
+  }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -1,0 +1,72 @@
+<div class="modal-backdrop" (click)="onCancel()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <h2>Nova Ficha de Aluno</h2>
+      <p class="subtitle">Dados do aluno e do responsável</p>
+    </header>
+
+    <form [formGroup]="alunoForm" (ngSubmit)="onSubmit()" class="modal-form">
+
+      <div class="section-divider">
+        <span>Dados do Aluno</span>
+      </div>
+
+      <div class="form-group">
+        <label for="nomeCompleto">Nome completo</label>
+        <input id="nomeCompleto" type="text" formControlName="nomeCompleto" placeholder="Nome do aluno">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col">
+          <label for="matricula">Matrícula</label>
+          <input id="matricula" type="text" formControlName="matricula" placeholder="Ex: 2025001">
+        </div>
+        <div class="form-group col">
+          <label for="dataNascimento">Data de Nascimento</label>
+          <input id="dataNascimento" type="date" formControlName="dataNascimento">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="turmaId">Turma</label>
+        <select id="turmaId" formControlName="turmaId">
+          <option value="" disabled selected>Selecione uma turma</option>
+          @for (turma of turmas; track turma.id) {
+            <option [value]="turma.id">{{ turma.nome }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="section-divider">
+        <span>Dados do Responsável</span>
+      </div>
+
+      <div class="form-group">
+        <label for="nomeResponsavel">Nome do responsável</label>
+        <input id="nomeResponsavel" type="text" formControlName="nomeResponsavel" placeholder="Nome completo">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col">
+          <label for="cpf">CPF</label>
+          <input id="cpf" type="text" formControlName="cpf" placeholder="000.000.000-00">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" formControlName="email" placeholder="responsavel@email.com">
+      </div>
+
+      <div class="form-group">
+        <label for="telefone">Telefone</label>
+        <input id="telefone" type="text" formControlName="telefone" placeholder="(00) 00000-0000">
+      </div>
+
+      <footer class="modal-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+        <button type="submit" class="btn-primary" [disabled]="alunoForm.invalid">Cadastrar</button>
+      </footer>
+    </form>
+  </div>
+</div>
