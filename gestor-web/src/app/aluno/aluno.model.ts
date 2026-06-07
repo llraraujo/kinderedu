@@ -8,7 +8,6 @@ export interface Aluno {
   // Dados do Responsável
   nomeResponsavel: string;
   cpf: string;
-  parentesco: string;
   email: string;
   telefone: string;
 }

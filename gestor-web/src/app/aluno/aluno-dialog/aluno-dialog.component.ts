@@ -21,7 +21,6 @@ export class AlunoDialogComponent {
     { id: 't2', nome: 'Maternal II - B' }
   ];
 
-  parentescos = ['Pai', 'Mãe', 'Avô(ó)', 'Tio(a)', 'Outro'];
 
   constructor() {
     this.alunoForm = this.fb.group({
@@ -34,7 +33,6 @@ export class AlunoDialogComponent {
       // Bloco: Responsável
       nomeResponsavel: ['', Validators.required],
       cpf: ['', Validators.required],
-      parentesco: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', Validators.required]
     });
