@@ -24,23 +24,23 @@ class EducatorDashboardController {
       StudentOverview(
         id: '2',
         name: 'Pedro Henrique',
-        age: '1 ano e 3 meses',
+        age: '2 anos e 3 meses',
         responsibleName: 'João Costa',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'images/perfil2.png',
       ),
       StudentOverview(
         id: '3',
         name: 'Sofia Maria',
         age: '2 anos',
         responsibleName: 'Ana Santos',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'images/perfil3.png',
       ),
       StudentOverview(
         id: '4',
         name: 'Lucas Gabriel',
-        age: '6 meses',
+        age: '2 anos',
         responsibleName: 'Carla Souza',
-        imageUrl: 'https://via.placeholder.com/150',
+        imageUrl: 'images/perfil4.png',
       ),
     ];
   }
