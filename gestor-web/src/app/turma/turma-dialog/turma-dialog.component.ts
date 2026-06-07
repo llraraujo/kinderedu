@@ -27,7 +27,6 @@ export class TurmaDialogComponent {
       nome: ['', Validators.required],
       anoSerie: ['', Validators.required],
       turno: ['Manhã', Validators.required],
-      professorId: ['', Validators.required],
       capacidade: [20, [Validators.required, Validators.min(1)]]
     });
   }

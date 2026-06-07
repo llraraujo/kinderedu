@@ -3,6 +3,5 @@ export interface Turma {
   nome: string;
   anoSerie: string;
   turno: 'Manhã' | 'Tarde' | 'Integral';
-  professorId: string;
   capacidade: number;
 }
