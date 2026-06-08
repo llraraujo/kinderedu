@@ -1,13 +1,33 @@
 package com.kinderedu.backend.domain.entities;
 
 import com.kinderedu.backend.domain.enums.ETurno;
+import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "tb_turma")
 public class Turma {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTurma;
     private String nome;
     private String anoSerie;
     private Integer capacidade;
     private ETurno turno;
+
+    @OneToOne(mappedBy = "turma" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Professor professor;
+
+    @OneToMany(
+            mappedBy = "turma",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    private Set<Aluno> alunos = new HashSet<>();
 
     public Turma() {
     }
@@ -58,5 +78,23 @@ public class Turma {
 
     public void setTurno(ETurno turno) {
         this.turno = turno;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        professor.setTurma(this);
+        this.professor = professor;
+    }
+
+    public Set<Aluno> getAlunos() {
+        return alunos;
+    }
+
+    public void addAluno(Aluno aluno) {
+        aluno.setTurma(this);
+        this.alunos.add(aluno);
     }
 }

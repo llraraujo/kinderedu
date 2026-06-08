@@ -1,13 +1,24 @@
 package com.kinderedu.backend.domain.entities;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
+@Table(name = "tb_professor")
 public class Professor {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProfessor;
     private String nome;
     private String cpf;
     private String telefone;
     private String emailInstitucional;
+
+    @OneToOne
+    @JoinColumn(name = "turma_id", nullable = false)
+    private Turma turma;
 
     public Professor() {
     }
@@ -58,5 +69,14 @@ public class Professor {
 
     public void setEmailInstitucional(String emailInstitucional) {
         this.emailInstitucional = emailInstitucional;
+    }
+
+    public Turma getTurma() {
+        return turma;
+    }
+
+    public void setTurma(Turma turma) {
+        turma.setProfessor(this);
+        this.turma = turma;
     }
 }
