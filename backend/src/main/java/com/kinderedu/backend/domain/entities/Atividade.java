@@ -12,6 +12,8 @@ public class Atividade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAtividade;
+
+    @Enumerated(EnumType.STRING)
     private ETipoAtividade tipo;
     private String observacao;
     private Date data;

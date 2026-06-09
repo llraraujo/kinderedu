@@ -16,6 +16,7 @@ public class Turma {
     private String nome;
     private String anoSerie;
     private Integer capacidade;
+    @Enumerated(EnumType.STRING)
     private ETurno turno;
 
     @OneToOne(mappedBy = "turma" ,fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)

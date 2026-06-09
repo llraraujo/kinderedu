@@ -2,6 +2,8 @@ package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.domain.enums.ETurno;
+import com.kinderedu.backend.respository.TurmaRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -9,6 +11,13 @@ import java.util.List;
 
 @Service
 public class TurmaService {
+
+    private final TurmaRepository turmaRepository;
+
+    @Autowired
+    public TurmaService(TurmaRepository turmaRepository) {
+        this.turmaRepository = turmaRepository;
+    }
 
     private final static List<Turma> turmas = new ArrayList<Turma>(){
         {
