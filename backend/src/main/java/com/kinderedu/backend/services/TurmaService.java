@@ -1,5 +1,8 @@
 package com.kinderedu.backend.services;
 
+import com.kinderedu.backend.domain.dto.ResponsavelCadastroDTO;
+import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
+import com.kinderedu.backend.domain.entities.Responsavel;
 import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.domain.enums.ETurno;
 import com.kinderedu.backend.respository.TurmaRepository;
@@ -27,6 +30,21 @@ public class TurmaService {
     };
 
     public List<Turma> todasAsTurmas() {
-       return this.turmas;
+       return this.turmaRepository.findAll();
+    }
+
+    public Long create(TurmaCadastroDTO turmaDTO){
+        Turma turma = convertDtoToEntity(turmaDTO);
+        turma = this.turmaRepository.save(turma);
+        return turma.getIdTurma();
+    }
+
+    private Turma convertDtoToEntity(TurmaCadastroDTO turmaDTO) {
+        Turma turma = new Turma();
+        turma.setNome(turmaDTO.getNome());
+        turma.setAnoSerie(turmaDTO.getAnoSerie());
+        turma.setCapacidade(turmaDTO.getCapacidade());
+        turma.setTurno(turmaDTO.getTurno());
+        return turma;
     }
 }

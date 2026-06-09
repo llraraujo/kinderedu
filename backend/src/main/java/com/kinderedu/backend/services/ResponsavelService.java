@@ -27,7 +27,7 @@ public class ResponsavelService {
     };
 
     public List<Responsavel> todosOsResponsaveis() {
-        return this.responsaveis;
+        return this.responsavelRepository.findAll();
     }
 
     public Long create(ResponsavelCadastroDTO responsavelDTO) {

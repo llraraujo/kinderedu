@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/responsaveis")
-public class ResponsavelController {
+public class ResponsavelController extends BaseController{
     private final ResponsavelService responsavelService;
 
     @Autowired
@@ -40,13 +40,6 @@ public class ResponsavelController {
         Long id = this.responsavelService.create(responsavelDTO);
         URI uri = createRouteUri(id);
         return ResponseEntity.created(uri).build();
-    }
-
-    private URI createRouteUri(Long id){
-        URI uri = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}").buildAndExpand(id).toUri();
-        return uri;
     }
 
 }
