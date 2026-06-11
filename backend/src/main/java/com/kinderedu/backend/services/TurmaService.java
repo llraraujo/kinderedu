@@ -2,13 +2,12 @@ package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
 import com.kinderedu.backend.domain.entities.Turma;
-import com.kinderedu.backend.domain.enums.ETurno;
 import com.kinderedu.backend.respository.TurmaRepository;
 import com.kinderedu.backend.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
