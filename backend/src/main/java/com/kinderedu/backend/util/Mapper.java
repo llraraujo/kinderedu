@@ -1,9 +1,11 @@
 package com.kinderedu.backend.util;
 
 import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
+import com.kinderedu.backend.domain.dto.ProfessorCadastroDTO;
 import com.kinderedu.backend.domain.dto.ResponsavelCadastroDTO;
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
+import com.kinderedu.backend.domain.entities.Professor;
 import com.kinderedu.backend.domain.entities.Responsavel;
 import com.kinderedu.backend.domain.entities.Turma;
 
@@ -34,5 +36,13 @@ public class Mapper {
         turma.setCapacidade(turmaDTO.getCapacidade());
         turma.setTurno(turmaDTO.getTurno());
         return turma;
+    }
+    public static Professor convertDtoToEntity(ProfessorCadastroDTO professorDto) {
+        Professor professor = new Professor();
+        professor.setNome(professorDto.getNome());
+        professor.setCpf(professorDto.getCpf());
+        professor.setTelefone(professorDto.getTelefone());
+        professor.setEmailInstitucional(professorDto.getEmailInstitucional());
+        return professor;
     }
 }
