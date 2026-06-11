@@ -18,8 +18,10 @@ public class Responsavel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idResponsavel;
     private String nome;
+    @Column(unique = true)
     private String cpf;
     private String telefone;
+    @Column(unique = true)
     private String email;
     @OneToMany(
             mappedBy = "responsavel",

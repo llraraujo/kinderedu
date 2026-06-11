@@ -1,10 +1,11 @@
 package com.kinderedu.backend.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+
 
 @Entity
 @Table(name = "tb_professor")
@@ -16,12 +17,16 @@ public class Professor implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProfessor;
     private String nome;
+
+    @Column(unique = true)
     private String cpf;
     private String telefone;
+    @Column(unique = true)
     private String emailInstitucional;
 
     @OneToOne
     @JoinColumn(name = "turma_id", nullable = false)
+    @JsonIgnore
     private Turma turma;
 
     public Professor() {
@@ -80,7 +85,7 @@ public class Professor implements Serializable {
     }
 
     public void setTurma(Turma turma) {
-        turma.setProfessor(this);
+        //turma.setProfessor(this);
         this.turma = turma;
     }
 }

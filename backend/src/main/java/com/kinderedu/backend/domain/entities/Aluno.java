@@ -18,6 +18,7 @@ public class Aluno  implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAluno;
     private String nome;
+    @Column(unique = true)
     private String matricula;
     private String fichaMedica;
     private byte[] foto;
