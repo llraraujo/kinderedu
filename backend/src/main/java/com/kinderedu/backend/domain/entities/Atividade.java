@@ -3,11 +3,16 @@ package com.kinderedu.backend.domain.entities;
 import com.kinderedu.backend.domain.enums.ETipoAtividade;
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "tb_atividade")
-public class Atividade {
+public class Atividade implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

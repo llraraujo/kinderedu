@@ -2,11 +2,15 @@ package com.kinderedu.backend.domain.entities;
 
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "tb_professor")
-public class Professor {
+public class Professor implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

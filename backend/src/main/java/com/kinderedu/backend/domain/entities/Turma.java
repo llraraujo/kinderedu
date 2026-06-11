@@ -1,14 +1,19 @@
 package com.kinderedu.backend.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kinderedu.backend.domain.enums.ETurno;
 import jakarta.persistence.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "tb_turma")
-public class Turma {
+public class Turma implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +33,7 @@ public class Turma {
             orphanRemoval = true,
             fetch = FetchType.LAZY
     )
+    @JsonIgnore
     private Set<Aluno> alunos = new HashSet<>();
 
     public Turma() {
@@ -90,9 +96,6 @@ public class Turma {
         this.professor = professor;
     }
 
-    public Set<Aluno> getAlunos() {
-        return alunos;
-    }
 
     public void addAluno(Aluno aluno) {
         aluno.setTurma(this);

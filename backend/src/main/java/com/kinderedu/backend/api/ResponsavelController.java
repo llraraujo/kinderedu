@@ -30,15 +30,15 @@ public class ResponsavelController extends BaseController{
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(responseCode = "200")})
-    public ResponseEntity<List<Responsavel>> getAll() {
+    public ResponseEntity<List<Responsavel>> index() {
         var responsaveis = responsavelService.todosOsResponsaveis();
         return ResponseEntity.ok(responsaveis);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity create(@RequestBody ResponsavelCadastroDTO responsavelDTO){
-        Long id = this.responsavelService.create(responsavelDTO);
-        URI uri = createRouteUri(id);
+        Responsavel responsavel = this.responsavelService.create(responsavelDTO);
+        URI uri = createRouteUri(responsavel.getIdResponsavel());
         return ResponseEntity.created(uri).build();
     }
 

@@ -1,37 +1,49 @@
 package com.kinderedu.backend.services;
 
+import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
+import com.kinderedu.backend.domain.entities.Responsavel;
+import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.respository.AlunoRepository;
+import com.kinderedu.backend.util.Mapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AlunoService {
 
     private final AlunoRepository alunoRepository;
+    private final ResponsavelService responsavelService;
+    private final TurmaService turmaService;
 
     @Autowired
-    public  AlunoService(AlunoRepository alunoRepository) {
+    public  AlunoService(AlunoRepository alunoRepository, ResponsavelService responsavelService, TurmaService turmaService) {
         this.alunoRepository = alunoRepository;
+        this.responsavelService = responsavelService;
+        this.turmaService = turmaService;
     }
-
-    private final static List<Aluno> alunos = new ArrayList<>(){
-        {
-            Aluno aluno1 = new Aluno(1L, "João da Silva", "IESJABC", null, null, null);
-            Aluno aluno2 = new Aluno(2L, "Maria Laura", "IESJDEF", null, null, null);
-            // Responsavel respo1 = new Responsavel(1L, "Maria Silva", "123.456.789-10", "(11) 99999-9999", "marisilva@gmail.com");
-            //Responsavel respo2 = new Responsavel(2L, "Adriano Pereira", "123.456.745-08", "(11) 88888-9999", "apereira@gmail.com");
-            // aluno1.setResponsavel(respo1);
-            //aluno2.setResponsavel(respo2);
-            add(aluno1);
-            add(aluno2);
-        }
-    };
 
     public  List<Aluno> todosOsAlunos() {
-        return alunos;
+        return alunoRepository.findAll();
     }
+
+    @Transactional
+    public Long create(AlunoCadastroDTO alunoDto) {
+        Aluno aluno = Mapper.converDtoToEntity(alunoDto);
+        Turma turma = turmaService.buscarPorId(alunoDto.getIdTurma());
+        Responsavel responsavel =  responsavelService.buscarPorCpf(alunoDto.getResponsavelDTO().getCpf());
+
+        if (responsavel == null) {
+            responsavel = responsavelService.create(alunoDto.getResponsavelDTO());
+        }
+
+        aluno.setResponsavel(responsavel);
+        aluno.setTurma(turma);
+        aluno = this.alunoRepository.save(aluno);
+        return aluno.getIdAluno();
+    }
+
 }
