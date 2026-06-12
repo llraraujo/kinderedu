@@ -1,6 +1,7 @@
 package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
+import com.kinderedu.backend.domain.dto.TurmaListagemDTO;
 import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.respository.TurmaRepository;
 import com.kinderedu.backend.util.Mapper;
@@ -20,8 +21,9 @@ public class TurmaService {
         this.turmaRepository = turmaRepository;
     }
 
-    public List<Turma> todasAsTurmas() {
-       return this.turmaRepository.findAll();
+    public List<TurmaListagemDTO> todasAsTurmas() {
+        List<Turma> turmas = this.turmaRepository.findAll();
+        return  turmas.stream().map(TurmaListagemDTO::new).toList();
     }
 
     public Turma create(TurmaCadastroDTO turmaDTO){

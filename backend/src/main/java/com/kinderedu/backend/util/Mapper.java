@@ -1,9 +1,6 @@
 package com.kinderedu.backend.util;
 
-import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
-import com.kinderedu.backend.domain.dto.ProfessorCadastroDTO;
-import com.kinderedu.backend.domain.dto.ResponsavelCadastroDTO;
-import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
+import com.kinderedu.backend.domain.dto.*;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Professor;
 import com.kinderedu.backend.domain.entities.Responsavel;
