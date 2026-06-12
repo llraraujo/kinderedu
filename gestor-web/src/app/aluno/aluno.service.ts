@@ -1,20 +1,25 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, delay, of } from 'rxjs';
 import { Aluno } from './aluno.model';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Professor } from '../professor/professor.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AlunoService {
   private alunosDB: Aluno[] = [];
+  private apiUrl = 'http://localhost:8080';
+  private http = inject(HttpClient);
 
   getAlunos(): Observable<Aluno[]> {
-    return of(this.alunosDB).pipe(delay(500));
+    var observer = this.http.get<Aluno[]>(`${this.apiUrl}/alunos`);
+    observer.subscribe((data) => (this.alunosDB = data));
+    return of(this.alunosDB);
   }
 
   cadastrarAluno(aluno: Aluno): Observable<Aluno> {
-    const novoAluno = { ...aluno, id: Math.random().toString(36).substring(2, 9) };
-    this.alunosDB.push(novoAluno);
-    return of(novoAluno).pipe(delay(800));
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Aluno>(`${this.apiUrl}/alunos`, aluno, { headers });
   }
 }

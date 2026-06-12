@@ -3,8 +3,8 @@ export interface Aluno {
   // Dados do Aluno
   nomeCompleto: string;
   matricula: string;
-  dataNascimento: string;
-  turmaId: string;
+  dataNascimento: Date;
+  turmaId: number;
   // Dados do Responsável
   nomeResponsavel: string;
   cpf: string;

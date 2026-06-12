@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Turma } from '../../turma/turma.model';
 
 @Component({
   selector: 'app-aluno-dialog',
@@ -12,15 +13,10 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 export class AlunoDialogComponent {
   @Output() closeDialog = new EventEmitter<void>();
   @Output() saveAluno = new EventEmitter<any>();
+  @Input() turmas: Turma[] = [];
 
   private fb = inject(FormBuilder);
   alunoForm: FormGroup;
-
-  turmas = [
-    { id: 't1', nome: 'Jardim I - A' },
-    { id: 't2', nome: 'Maternal II - B' }
-  ];
-
 
   constructor() {
     this.alunoForm = this.fb.group({
