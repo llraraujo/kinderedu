@@ -4,4 +4,5 @@ export interface Turma {
   anoSerie: string;
   turno: 'Manhã' | 'Tarde' | 'Integral';
   capacidade: number;
+  professor?: string;
 }

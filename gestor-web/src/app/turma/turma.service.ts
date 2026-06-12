@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, delay, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { Observable, delay, of, catchError, throwError } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Turma } from './turma.model';
 
 @Injectable({
@@ -8,14 +9,23 @@ import { Turma } from './turma.model';
 export class TurmaService {
   // Simulando um banco de dados vazio para exibir o Empty State da imagem
   private turmasDB: Turma[] = [];
+  private http = inject(HttpClient); // Inject the client via inject() API
+  private apiUrl = 'http://localhost:8080';
 
   getTurmas(): Observable<Turma[]> {
-    return of(this.turmasDB).pipe(delay(500));
+    var observer =   this.http.get<Turma[]>(`${this.apiUrl}/turmas`);
+    observer.subscribe(data =>  this.turmasDB = data);
+    return of(this.turmasDB);
   }
 
-  cadastrarTurma(turma: Turma): Observable<Turma> {
-    const novaTurma = { ...turma, id: Math.random().toString(36).substr(2, 9) };
-    this.turmasDB.push(novaTurma);
-    return of(novaTurma).pipe(delay(800)); // Simula tempo de rede
+   cadastrarTurma(turma: Turma): Observable<Turma> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Turma>(`${this.apiUrl}/turmas`, turma, { headers }).pipe(catchError(this.handleError));
+  }
+
+  // Error Utility Handler
+  private handleError(error: any) {
+    console.error('An error occurred:', error);
+    return throwError(() => new Error('Something went wrong. Please try again later.'));
   }
 }
