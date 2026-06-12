@@ -1,6 +1,8 @@
 package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
+import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
+import com.kinderedu.backend.domain.dto.ResponsavelCadastroDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Responsavel;
 import com.kinderedu.backend.domain.entities.Turma;
@@ -28,26 +30,33 @@ public class AlunoService {
         this.turmaRepository = turmaRepository;
     }
 
-    public  List<Aluno> todosOsAlunos() {
-        return alunoRepository.findAll();
+    public  List<AlunoListagemDTO> todosOsAlunos() {
+        List<Aluno> alunos = this.alunoRepository.findAllComTurmaEResponsavel();
+        return alunos.stream().map(AlunoListagemDTO::new).toList();
     }
 
 
     @Transactional
-    public Long create(AlunoCadastroDTO alunoDto) {
+    public Aluno create(AlunoCadastroDTO alunoDto) {
         Aluno aluno = Mapper.converDtoToEntity(alunoDto);
-        Turma turma = turmaRepository.findById(alunoDto.getIdTurma()).get();
-        Responsavel responsavel =  responsavelRepository.findByCpf(alunoDto.getResponsavelDTO().getCpf());
+        Turma turma = turmaRepository.findById(alunoDto.getTurmaId()).get();
+        Responsavel responsavel =  responsavelRepository.findByCpf(alunoDto.getCpf());
 
         if (responsavel == null) {
-            responsavel =  Mapper.convertDtoToEntity(alunoDto.getResponsavelDTO());
+            ResponsavelCadastroDTO responsavelCadastroDTO = new ResponsavelCadastroDTO(
+                    alunoDto.getNomeResponsavel(),
+                    alunoDto.getCpf(),
+                    alunoDto.getTelefone(),
+                    alunoDto.getEmail()
+            );
+            responsavel =  Mapper.convertDtoToEntity(responsavelCadastroDTO);
             responsavel = responsavelRepository.save(responsavel);
         }
 
         aluno.setResponsavel(responsavel);
         aluno.setTurma(turma);
         aluno = this.alunoRepository.save(aluno);
-        return aluno.getIdAluno();
+        return aluno;
     }
 
 }

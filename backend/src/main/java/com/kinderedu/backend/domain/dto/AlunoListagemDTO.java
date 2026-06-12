@@ -1,9 +1,11 @@
 package com.kinderedu.backend.domain.dto;
 
+import com.kinderedu.backend.domain.entities.Aluno;
+
 import java.util.Date;
 
-public class AlunoCadastroDTO {
-
+public class AlunoListagemDTO {
+    private Long id;
     private String nomeCompleto;
     private String matricula;
     private Date dataNascimento;
@@ -13,19 +15,27 @@ public class AlunoCadastroDTO {
     private String email;
     private String telefone;
 
-    public AlunoCadastroDTO(){
-
+    public AlunoListagemDTO() {
     }
 
-    public AlunoCadastroDTO(String nomeCompleto, String matricula, Date dataNascimento, Long turmaId, String nomeResponsavel, String cpf, String email, String telefone) {
-        this.nomeCompleto = nomeCompleto;
-        this.matricula = matricula;
-        this.dataNascimento = dataNascimento;
-        this.turmaId = turmaId;
-        this.nomeResponsavel = nomeResponsavel;
-        this.cpf = cpf;
-        this.email = email;
-        this.telefone = telefone;
+    public AlunoListagemDTO(Aluno aluno) {
+        this.id = aluno.getIdAluno();
+        this.nomeCompleto = aluno.getNome();
+        this.matricula = aluno.getMatricula();
+        this.dataNascimento = aluno.getDataNascimento();
+        this.turmaId = aluno.getTurma().getIdTurma();
+        this.nomeResponsavel = aluno.getResponsavel().getNome();
+        this.cpf = aluno.getResponsavel().getCpf();
+        this.email = aluno.getResponsavel().getEmail();
+        this.telefone = aluno.getResponsavel().getTelefone();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getNomeCompleto() {

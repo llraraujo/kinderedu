@@ -2,6 +2,7 @@ package com.kinderedu.backend.api;
 
 
 import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
+import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.services.AlunoService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,16 +28,16 @@ public class AlunoController extends  BaseController{
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(responseCode = "200")})
-    public ResponseEntity<List<Aluno>> index() {
+    public ResponseEntity<List<AlunoListagemDTO>> index() {
         var alunos = alunoService.todosOsAlunos();
         return ResponseEntity.ok(alunos);
     }
 
     @RequestMapping(method =  RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(responseCode = "201")})
-    public ResponseEntity create(@RequestBody  AlunoCadastroDTO alunoDTO) {
-        Long id = this.alunoService.create(alunoDTO);
-        URI uri = createRouteUri(id);
+    public ResponseEntity<Aluno> create(@RequestBody  AlunoCadastroDTO alunoDTO) {
+        Aluno aluno = this.alunoService.create(alunoDTO);
+        URI uri = createRouteUri(aluno.getIdAluno());
         return ResponseEntity.created(uri).build();
     }
 }

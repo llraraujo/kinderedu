@@ -10,10 +10,9 @@ public class Mapper {
 
     public static Aluno converDtoToEntity(AlunoCadastroDTO alunoDto) {
         Aluno aluno = new Aluno();
-        aluno.setNome(alunoDto.getNome());
+        aluno.setNome(alunoDto.getNomeCompleto());
         aluno.setDataNascimento(alunoDto.getDataNascimento());
-        aluno.setFoto(alunoDto.getFoto());
-        aluno.setFichaMedica(alunoDto.getFichaMedica());
+        aluno.setMatricula(alunoDto.getMatricula());
         return aluno;
     }
 
