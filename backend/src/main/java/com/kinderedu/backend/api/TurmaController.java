@@ -1,9 +1,12 @@
 package com.kinderedu.backend.api;
 
 
+import com.kinderedu.backend.domain.dto.AlunoListagemMobileDTO;
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
 import com.kinderedu.backend.domain.dto.TurmaListagemDTO;
 import com.kinderedu.backend.domain.entities.Turma;
+import com.kinderedu.backend.services.AlunoService;
+import com.kinderedu.backend.services.ProfessorService;
 import com.kinderedu.backend.services.TurmaService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -34,6 +37,14 @@ public class TurmaController  extends BaseController{
         var turmas = turmaService.todasAsTurmas();
         return ResponseEntity.ok(turmas);
     }
+
+    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{professorCpf}")
+    @ApiResponses({@ApiResponse(responseCode = "200")})
+    public ResponseEntity<List<AlunoListagemMobileDTO>> alunosPorCpfProfessor(@PathVariable String professorCpf) {
+        var alunos = turmaService.alunosPorCpfProfessor(professorCpf);
+        return ResponseEntity.ok(alunos);
+    }
+
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(responseCode = "201")})

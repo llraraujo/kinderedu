@@ -5,6 +5,8 @@ import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Responsavel;
 import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.respository.AlunoRepository;
+import com.kinderedu.backend.respository.ResponsavelRepository;
+import com.kinderedu.backend.respository.TurmaRepository;
 import com.kinderedu.backend.util.Mapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,28 +18,30 @@ import java.util.List;
 public class AlunoService {
 
     private final AlunoRepository alunoRepository;
-    private final ResponsavelService responsavelService;
-    private final TurmaService turmaService;
+    private final ResponsavelRepository responsavelRepository;
+    private final TurmaRepository turmaRepository;
 
     @Autowired
-    public  AlunoService(AlunoRepository alunoRepository, ResponsavelService responsavelService, TurmaService turmaService) {
+    public  AlunoService(AlunoRepository alunoRepository, ResponsavelRepository responsavelRepository, TurmaRepository turmaRepository) {
         this.alunoRepository = alunoRepository;
-        this.responsavelService = responsavelService;
-        this.turmaService = turmaService;
+        this.responsavelRepository = responsavelRepository;
+        this.turmaRepository = turmaRepository;
     }
 
     public  List<Aluno> todosOsAlunos() {
         return alunoRepository.findAll();
     }
 
+
     @Transactional
     public Long create(AlunoCadastroDTO alunoDto) {
         Aluno aluno = Mapper.converDtoToEntity(alunoDto);
-        Turma turma = turmaService.buscarPorId(alunoDto.getIdTurma());
-        Responsavel responsavel =  responsavelService.buscarPorCpf(alunoDto.getResponsavelDTO().getCpf());
+        Turma turma = turmaRepository.findById(alunoDto.getIdTurma()).get();
+        Responsavel responsavel =  responsavelRepository.findByCpf(alunoDto.getResponsavelDTO().getCpf());
 
         if (responsavel == null) {
-            responsavel = responsavelService.create(alunoDto.getResponsavelDTO());
+            responsavel =  Mapper.convertDtoToEntity(alunoDto.getResponsavelDTO());
+            responsavel = responsavelRepository.save(responsavel);
         }
 
         aluno.setResponsavel(responsavel);
