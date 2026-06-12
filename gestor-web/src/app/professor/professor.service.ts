@@ -1,21 +1,26 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable, delay, of } from 'rxjs';
 import { Professor } from './professor.model';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProfessorService {
   // Inicializamos vazio para forçar a exibição do "Empty State"
   private professoresDB: Professor[] = [];
+  private apiUrl = 'http://localhost:8080';
+  private http = inject(HttpClient);
 
   getProfessores(): Observable<Professor[]> {
-    return of(this.professoresDB).pipe(delay(500));
+    var observer = this.http.get<Professor[]>(`${this.apiUrl}/professores`);
+    observer.subscribe((data) => (this.professoresDB = data));
+    return of(this.professoresDB);
   }
 
   cadastrarProfessor(professor: Professor): Observable<Professor> {
-    const novoProfessor = { ...professor, id: Math.random().toString(36).substring(2, 9) };
-    this.professoresDB.push(novoProfessor);
-    return of(novoProfessor).pipe(delay(800));
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post<Professor>(`${this.apiUrl}/professores`, professor, { headers });
   }
 }

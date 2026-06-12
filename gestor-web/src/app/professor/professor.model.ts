@@ -1,8 +1,8 @@
 export interface Professor {
   id?: string;
   nomeCompleto: string;
-  email: string;
+  emailInstitucional: string;
   cpf: string;
   telefone: string;
-  turmaId: string;
+  idTurma: number;
 }

@@ -20,7 +20,7 @@ export class TurmaService {
 
    cadastrarTurma(turma: Turma): Observable<Turma> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<Turma>(`${this.apiUrl}/turmas`, turma, { headers }).pipe(catchError(this.handleError));
+    return this.http.post<Turma>(`${this.apiUrl}/turmas`, turma, { headers });
   }
 
   // Error Utility Handler
