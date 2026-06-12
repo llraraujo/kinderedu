@@ -1,6 +1,8 @@
 package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.dto.ProfessorCadastroDTO;
+import com.kinderedu.backend.domain.dto.ProfessorListagemDTO;
+import com.kinderedu.backend.domain.dto.TurmaListagemDTO;
 import com.kinderedu.backend.domain.entities.Professor;
 import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.respository.ProfessorRepository;
@@ -23,8 +25,9 @@ public class ProfessorService {
         this.turmaRepository = turmaRepository;
     }
 
-    public List<Professor> todosOsProfessores() {
-        return this.professorRepository.findAll();
+    public List<ProfessorListagemDTO> todosOsProfessores() {
+       List<Professor> professores = this.professorRepository.findAll();
+       return professores.stream().map(ProfessorListagemDTO::new).toList();
     }
 
 

@@ -48,7 +48,7 @@ public class TurmaController  extends BaseController{
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(responseCode = "201")})
-    public ResponseEntity create(@RequestBody TurmaCadastroDTO turmaCadastroDTO){
+    public ResponseEntity<Turma> create(@RequestBody TurmaCadastroDTO turmaCadastroDTO){
         Turma turma = this.turmaService.create(turmaCadastroDTO);
         URI uri = createRouteUri(turma.getIdTurma());
         return ResponseEntity.created(uri).build();

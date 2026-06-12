@@ -1,6 +1,7 @@
 package com.kinderedu.backend.api;
 
 import com.kinderedu.backend.domain.dto.ProfessorCadastroDTO;
+import com.kinderedu.backend.domain.dto.ProfessorListagemDTO;
 import com.kinderedu.backend.domain.entities.Professor;
 import com.kinderedu.backend.services.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ProfessorController extends  BaseController {
     }
 
     @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Professor>> index(){
+    public ResponseEntity<List<ProfessorListagemDTO>> index(){
         return ResponseEntity.ok(professorService.todosOsProfessores());
     }
 
