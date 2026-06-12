@@ -1,5 +1,5 @@
 class StudentOverview {
-  final String id;
+  final int id;
   final String name;
   final String age;
   final String responsibleName;
@@ -17,13 +17,11 @@ class StudentOverview {
 class ProfessorProfile {
   final String name;
   final String className;
-  final int studentCount;
   final String logoUrl;
 
   ProfessorProfile({
     required this.name,
     required this.className,
-    required this.studentCount,
     required this.logoUrl,
   });
 }

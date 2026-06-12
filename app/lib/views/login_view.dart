@@ -32,8 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _limparCampos() {
     setState(() {   
-       _cpf.text = "";
-       _senha.text = "";
+       _cpf.clear();
+       maskCpf.clear();
+       _senha.clear();
        _msgExisteUsuario = "";
     });
   }
@@ -204,8 +205,9 @@ class _LoginScreenState extends State<LoginScreen> {
               // 7. Botão Entrar
               ElevatedButton(
                 onPressed: () {
+                  String rawValue = maskCpf.getUnmaskedText();
                   var user = _controller.getUsuariosCadastrados().firstWhere(
-                    (user) => user.cpf == _cpf.text && user.senha == _senha.text,
+                    (user) => user.cpf == rawValue && user.senha == _senha.text,
                     orElse: () =>  User(cpf:"",senha:"", role: "")
                   );
                   if(user.cpf.isNotEmpty && user.senha.isNotEmpty){
