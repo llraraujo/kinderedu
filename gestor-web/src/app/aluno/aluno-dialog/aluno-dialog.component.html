@@ -55,6 +55,7 @@
         <div class="form-group col">
           <label for="cpf">CPF</label>
           <input id="cpf" type="text" formControlName="cpf" placeholder="000.000.000-00"
+                 inputmode="numeric" maxlength="14" autocomplete="off" (input)="onCpfInput($event)"
                  [class.is-invalid]="alunoForm.get('cpf')?.invalid && alunoForm.get('cpf')?.touched">
         </div>
       </div>
