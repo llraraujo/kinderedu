@@ -54,13 +54,13 @@ class RegistrationController {
   }
 
   Future<bool> createAtividade(String alunoId, RegistrationModel registro) async {
-  final url = Uri.parse('$baseURL/$alunoId/atividade');
+  final url = Uri.parse('$baseURL/alunos/$alunoId/atividade');
   
   try {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
-      body: jsonEncode(registro),
+      body: jsonEncode(registro, toEncodable: (Object? value) => value is RegistrationModel ? RegistrationModel.toJson(value) :  throw UnsupportedError("erro ao transformar para um JSON object")),
     );
 
     if (response.statusCode == 201) {

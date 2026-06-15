@@ -3,7 +3,7 @@ package com.kinderedu.backend.api;
 
 import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
 import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
-import com.kinderedu.backend.domain.dto.AtividadeAlunoCadastroDTO;
+import com.kinderedu.backend.domain.dto.AtividadeCadastroDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Atividade;
 import com.kinderedu.backend.services.AlunoService;
@@ -45,8 +45,9 @@ public class AlunoController extends  BaseController{
 
     @RequestMapping(method =  RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE, path = "/{alunoId}/atividade")
     @ApiResponses({@ApiResponse(responseCode = "201")})
-    public ResponseEntity<Atividade> cadastrarAtividade(@PathVariable Long alunoId, @RequestBody AtividadeAlunoCadastroDTO ativadadeDTO){
+    public ResponseEntity<Atividade> cadastrarAtividade(@PathVariable Long alunoId, @RequestBody AtividadeCadastroDTO ativadadeDTO){
         Atividade atividade = this.alunoService.cadastrarAtividade(alunoId, ativadadeDTO);
-        return ResponseEntity.ok().build();
+        URI uri = createRouteUri(atividade.getIdAtividade());
+        return ResponseEntity.created(uri).build();
     }
 }

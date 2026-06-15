@@ -14,4 +14,23 @@ class RegistrationModel {
     this.inicioSoneca,
     this.fimSoneca,
   });
+
+  RegistrationModel.fromJson(Map<String, dynamic> json): 
+    alunoId = json['alunoId'], 
+    tipo = json['tipo'], 
+    observacao = json['observacao'], 
+    inicioSoneca = json['inicioSoneca'], 
+    fimSoneca = json['fimSoneca'];
+
+  
+
+  static Map<String, dynamic> toJson(RegistrationModel value) =>
+    {
+      'alunoId': value.alunoId,
+      'tipo': value.tipo.name,
+      'observacao': value.observacao,
+      'inicioSoneca': value.inicioSoneca,
+      'fimSoneca': value.fimSoneca
+    };
+  
 }

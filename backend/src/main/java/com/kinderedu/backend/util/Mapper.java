@@ -43,7 +43,7 @@ public class Mapper {
         return professor;
     }
 
-    public static Atividade convertDtoToEntity(AtividadeAlunoCadastroDTO atividadeDto){
+    public static Atividade convertDtoToEntity(AtividadeCadastroDTO atividadeDto){
         Atividade atividade = new Atividade();
         atividade.setData(Date.from(Instant.now()));
         atividade.setObservacao(atividadeDto.getObservacao());

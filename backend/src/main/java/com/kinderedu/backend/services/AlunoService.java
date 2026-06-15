@@ -2,7 +2,7 @@ package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
 import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
-import com.kinderedu.backend.domain.dto.AtividadeAlunoCadastroDTO;
+import com.kinderedu.backend.domain.dto.AtividadeCadastroDTO;
 import com.kinderedu.backend.domain.dto.ResponsavelCadastroDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Atividade;
@@ -65,7 +65,7 @@ public class AlunoService {
     }
 
     @Transactional
-    public Atividade cadastrarAtividade(Long alunoId, AtividadeAlunoCadastroDTO atividadeDto) {
+    public Atividade cadastrarAtividade(Long alunoId, AtividadeCadastroDTO atividadeDto) {
         Aluno aluno = this.alunoRepository.findById(alunoId).get();
         Atividade atividade = Mapper.convertDtoToEntity(atividadeDto);
         atividade.setAluno(aluno);

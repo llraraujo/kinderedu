@@ -4,7 +4,7 @@ import com.kinderedu.backend.domain.enums.ETipoAtividade;
 
 
 
-public class AtividadeAlunoCadastroDTO {
+public class AtividadeCadastroDTO {
 
     private Long alunoId;
     private String observacao;
@@ -13,10 +13,10 @@ public class AtividadeAlunoCadastroDTO {
     private ETipoAtividade tipo;
 
 
-    public AtividadeAlunoCadastroDTO() {
+    public AtividadeCadastroDTO() {
     }
 
-    public AtividadeAlunoCadastroDTO(Long alunoId, String observacao, String inicioSoneca, String fimSoneca, ETipoAtividade tipo) {
+    public AtividadeCadastroDTO(Long alunoId, String observacao, String inicioSoneca, String fimSoneca, ETipoAtividade tipo) {
         this.alunoId = alunoId;
         this.observacao = observacao;
         this.inicioSoneca = inicioSoneca;
