@@ -75,6 +75,11 @@ public class AlunoService {
         atividades.forEach(atividade -> System.out.println(atividade.getObservacao()));
     }
 
+    public List<AtividadeDashboardDTO> recuperaAtividadesDashboard(Long alunoId) {
+        Aluno aluno = this.alunoRepository.findById(alunoId).get();
+        return this.atividadeRepository.findAtividadesDashboardByAluno(aluno);
+    }
+
     public List<AlunoProfileDTO> alunosPorCpfResponsavel(String alunosPorCpfResponsavel){
         var alunos = alunoRepository.findAlunosPorCpfResponsavel(alunosPorCpfResponsavel);
         return alunos.stream().map(AlunoProfileDTO::new).toList();

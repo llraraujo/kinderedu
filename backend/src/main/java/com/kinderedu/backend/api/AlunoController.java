@@ -1,10 +1,7 @@
 package com.kinderedu.backend.api;
 
 
-import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
-import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
-import com.kinderedu.backend.domain.dto.AlunoProfileDTO;
-import com.kinderedu.backend.domain.dto.AtividadeCadastroDTO;
+import com.kinderedu.backend.domain.dto.*;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Atividade;
 import com.kinderedu.backend.services.AlunoService;
@@ -54,9 +51,9 @@ public class AlunoController extends  BaseController{
 
     @RequestMapping(method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/atividades/{alunoId}")
     @ApiResponses({@ApiResponse(responseCode = "200")})
-    public ResponseEntity sumarioAtividades(@PathVariable Long alunoId){
-        this.alunoService.recuperaAtividades(alunoId);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AtividadeDashboardDTO>> sumarioAtividades(@PathVariable Long alunoId){
+        var atividades = this.alunoService.recuperaAtividadesDashboard(alunoId);
+        return ResponseEntity.ok(atividades);
     }
 
     @RequestMapping(method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{cpfResponsavel}")

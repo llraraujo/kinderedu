@@ -33,7 +33,7 @@ class DashboardController {
     return childProfile;
   }
 
-  Future<List<ActivitySummary>>  getAtivdades(int studentId) async{
+  Future<List<ActivitySummary>>  getAtividadesFromDb(int studentId) async{
     final url = Uri.parse("$baseURL/alunos/atividades/$studentId");
     List<ActivitySummary> atividades = [];
     try{
@@ -64,7 +64,7 @@ class DashboardController {
           summary.add(ActivitySummary(
                     title: "Sonecas", 
                     count: activity.quantidade, 
-                    lastTime: activity.horaUltimaAtividade, 
+                    lastTime: activity.ultimaAtualizacao.toString(), 
                     icon: Icons.nightlight_round, 
                     primaryColor: Colors.purpleAccent,
                     backgroundColor: Colors.purple.withOpacity(0.1)));
@@ -74,7 +74,7 @@ class DashboardController {
           summary.add(ActivitySummary(
                     title: "Alimentação", 
                     count: activity.quantidade, 
-                    lastTime: activity.horaUltimaAtividade, 
+                    lastTime: activity.ultimaAtualizacao.toString(), 
                     icon: Icons.restaurant, 
                     primaryColor: Colors.orange,
                     backgroundColor: Colors.orange.withOpacity(0.1)));
@@ -84,7 +84,7 @@ class DashboardController {
            summary.add(ActivitySummary(
                     title: "Higiene", 
                     count: activity.quantidade, 
-                    lastTime: activity.horaUltimaAtividade, 
+                    lastTime: activity.ultimaAtualizacao.toString(), 
                     icon: Icons.child_care, 
                     primaryColor: Colors.green,
                     backgroundColor: Colors.green.withOpacity(0.1)));

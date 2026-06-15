@@ -17,14 +17,13 @@ class _DashboardViewState extends State<DashboardView> {
   final DashboardController _controller = DashboardController();
   
   late ChildProfile _profile;
-  late List<ActivitySummary> _activities;
+  late List<ActivitySummary> _activities = [];
 
   @override
   void initState() {
     super.initState();
     // Carregando os dados via Controller
-    carregarProfile();
-    _activities = _controller.getTodayActivities();
+    carregarProfile().then((onValue) => carregarAtividades());
   }
 
   Future<void> carregarProfile() async {
@@ -33,6 +32,15 @@ class _DashboardViewState extends State<DashboardView> {
       _profile = profile;
     });
   }
+
+   Future<void> carregarAtividades() async {
+    var atividades = await _controller.getAtividadesFromDb(_profile.id ?? 0);
+    setState(() {
+      _activities = atividades;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +95,7 @@ class _DashboardViewState extends State<DashboardView> {
       ),
       itemCount: _activities.length,
       itemBuilder: (context, index) {
-        final activity = _activities[index];
+        late final activity = _activities[index];
         return Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
