@@ -56,19 +56,19 @@ class _RegistrationViewState extends State<RegistrationView> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _buildTabItem(
-          category: RegisterCategory.food,
+          tipo: ETipoAtividade.ALIMENTACAO,
           label: 'Alimentação',
           icon: Icons.restaurant,
           activeColor: Colors.orange,
         ),
         _buildTabItem(
-          category: RegisterCategory.sleep,
+          tipo: ETipoAtividade.SONECA,
           label: 'Sono',
           icon: Icons.nightlight_round,
           activeColor: Colors.purple,
         ),
         _buildTabItem(
-          category: RegisterCategory.hygiene,
+          tipo: ETipoAtividade.HIGIENE,
           label: 'Higiene',
           icon: Icons.child_care,
           activeColor: Colors.green,
@@ -78,15 +78,15 @@ class _RegistrationViewState extends State<RegistrationView> {
   }
 
   Widget _buildTabItem({
-    required RegisterCategory category,
+    required ETipoAtividade tipo,
     required String label,
     required IconData icon,
     required Color activeColor,
   }) {
-    final bool isActive = _controller.currentCategory == category;
+    final bool isActive = _controller.tipoSelecionado == tipo;
 
     return GestureDetector(
-      onTap: () => _controller.changeCategory(category, () => setState(() {})),
+      onTap: () => _controller.changeCategory(tipo, () => setState(() {})),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -121,17 +121,17 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   // Alterna o corpo interno baseado no estado do Controller
   Widget _buildCategoryBody() {
-    switch (_controller.currentCategory) {
-      case RegisterCategory.food:
+    switch (_controller.tipoSelecionado) {
+      case ETipoAtividade.ALIMENTACAO:
         return _buildTextForm(
           label: 'Descrição da Refeição',
           hint: 'Ex: Comeu a papinha de legumes toda e aceitou suco.',
           controller: _controller.foodController,
           themeColor: Colors.orange,
         );
-      case RegisterCategory.sleep:
+      case ETipoAtividade.SONECA:
         return _buildSleepForm();
-      case RegisterCategory.hygiene:
+      case ETipoAtividade.HIGIENE:
         return _buildTextForm(
           label: 'Registro de Higiene',
           hint: 'Ex: Troca de fralda realizada. Sem assaduras.',
@@ -240,8 +240,8 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   Widget _buildSaveButton(Color color) {
     return ElevatedButton(
-      onPressed: () {
-        final success = _controller.saveRegistration(widget.studentId);
+      onPressed: () async{
+        final success = await _controller.saveRegistration(widget.studentId);
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Registro salvo com sucesso!'), backgroundColor: Colors.green),

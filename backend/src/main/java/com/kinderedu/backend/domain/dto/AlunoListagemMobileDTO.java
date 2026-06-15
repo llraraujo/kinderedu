@@ -23,7 +23,7 @@ public class AlunoListagemMobileDTO {
         this.name = aluno.getNome();
         this.age = idadeEmString(aluno.getDataNascimento());
         this.responsibleName = aluno.getResponsavel().getNome();
-        this.imageUrl = Base64.getEncoder().encodeToString(aluno.getFoto());
+        this.imageUrl = aluno.getFoto() != null ? Base64.getEncoder().encodeToString(aluno.getFoto()) : null;
     }
 
     public Long getId() {

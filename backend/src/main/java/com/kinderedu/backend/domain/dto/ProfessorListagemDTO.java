@@ -4,7 +4,7 @@ import com.kinderedu.backend.domain.entities.Professor;
 
 public class ProfessorListagemDTO {
     private Long id;
-    private String nome;
+    private String nomeCompleto;
     private String emailInstitucional;
     private String cpf;
     private String telefone;
@@ -15,7 +15,7 @@ public class ProfessorListagemDTO {
 
     public ProfessorListagemDTO(Professor professor) {
         this.id = professor.getIdProfessor();
-        this.nome = professor.getNome();
+        this.nomeCompleto = professor.getNome();
         this.emailInstitucional = professor.getEmailInstitucional();
         this.cpf = professor.getCpf();
         this.telefone = professor.getTelefone();
@@ -30,12 +30,12 @@ public class ProfessorListagemDTO {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeCompleto() {
+        return nomeCompleto;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
     public String getEmailInstitucional() {

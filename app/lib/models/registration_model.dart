@@ -1,19 +1,17 @@
-enum RegisterCategory { food, sleep, hygiene }
+enum ETipoAtividade { ALIMENTACAO, SONECA, HIGIENE }
 
 class RegistrationModel {
-  final String studentId;
-  final RegisterCategory category;
-  final String? textContent;
-  final String? startTime;
-  final String? endTime;
-  final DateTime timestamp;
+  final int alunoId;
+  final ETipoAtividade tipo;
+  final String? observacao;
+  final String? inicioSoneca;
+  final String? fimSoneca;
 
   RegistrationModel({
-    required this.studentId,
-    required this.category,
-    this.textContent,
-    this.startTime,
-    this.endTime,
-    required this.timestamp,
+    required this.alunoId,
+    required this.tipo,
+    this.observacao,
+    this.inicioSoneca,
+    this.fimSoneca,
   });
 }

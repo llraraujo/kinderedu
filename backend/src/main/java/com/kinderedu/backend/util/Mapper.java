@@ -1,10 +1,10 @@
 package com.kinderedu.backend.util;
 
 import com.kinderedu.backend.domain.dto.*;
-import com.kinderedu.backend.domain.entities.Aluno;
-import com.kinderedu.backend.domain.entities.Professor;
-import com.kinderedu.backend.domain.entities.Responsavel;
-import com.kinderedu.backend.domain.entities.Turma;
+import com.kinderedu.backend.domain.entities.*;
+
+import java.time.Instant;
+import java.util.Date;
 
 public class Mapper {
 
@@ -33,6 +33,7 @@ public class Mapper {
         turma.setTurno(turmaDTO.getTurno());
         return turma;
     }
+
     public static Professor convertDtoToEntity(ProfessorCadastroDTO professorDto) {
         Professor professor = new Professor();
         professor.setNome(professorDto.getNome());
@@ -40,5 +41,18 @@ public class Mapper {
         professor.setTelefone(professorDto.getTelefone());
         professor.setEmailInstitucional(professorDto.getEmailInstitucional());
         return professor;
+    }
+
+    public static Atividade convertDtoToEntity(AtividadeAlunoCadastroDTO atividadeDto){
+        Atividade atividade = new Atividade();
+        atividade.setData(Date.from(Instant.now()));
+        atividade.setObservacao(atividadeDto.getObservacao());
+        atividade.setTipo(atividadeDto.getTipo());
+
+        if(atividade.getObservacao() == null && atividadeDto.getInicioSoneca() != null && atividadeDto.getFimSoneca() != null){
+            atividade.setObservacao("Soneca: " + atividadeDto.getInicioSoneca() + " - " + atividadeDto.getFimSoneca());
+        }
+
+        return atividade;
     }
 }
