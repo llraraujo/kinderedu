@@ -8,17 +8,16 @@ import 'dashboard_view.dart';
 class MainView extends StatefulWidget {
   const MainView({Key? key, required this.user}) : super(key: key);
   final User user;
-
   @override
   State<MainView> createState() => _MainViewState();
 }
 
 class _MainViewState extends State<MainView> {
   int _currentIndex = 0;
-
+  String get cpf => widget.user.cpf;
   // Lista que mapeia o índice da aba para a respectiva View
-  final List<Widget> _views = [
-    const DashboardView(), // 0: Hoje
+  late final List<Widget> _views = [
+    DashboardView(cpf: cpf), // 0: Hoje
     const DiaryTabNavigator(),  // 1: Diário
     const PhotoTabNavigator(), // 3: Fotos
     const ProfileView(), // 4: Perfil

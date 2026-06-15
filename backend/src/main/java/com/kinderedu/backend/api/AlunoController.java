@@ -3,6 +3,7 @@ package com.kinderedu.backend.api;
 
 import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
 import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
+import com.kinderedu.backend.domain.dto.AlunoProfileDTO;
 import com.kinderedu.backend.domain.dto.AtividadeCadastroDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Atividade;
@@ -49,5 +50,20 @@ public class AlunoController extends  BaseController{
         Atividade atividade = this.alunoService.cadastrarAtividade(alunoId, ativadadeDTO);
         URI uri = createRouteUri(atividade.getIdAtividade());
         return ResponseEntity.created(uri).build();
+    }
+
+    @RequestMapping(method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/atividades/{alunoId}")
+    @ApiResponses({@ApiResponse(responseCode = "200")})
+    public ResponseEntity sumarioAtividades(@PathVariable Long alunoId){
+        this.alunoService.recuperaAtividades(alunoId);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(method =  RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = "/{cpfResponsavel}")
+    @ApiResponses({@ApiResponse(responseCode = "200")})
+    public ResponseEntity<AlunoProfileDTO> alunosPorCpfResponsavel(@PathVariable String cpfResponsavel){
+        var alunos = this.alunoService.alunosPorCpfResponsavel(cpfResponsavel);
+        var alunoDto = alunos.get(0);
+        return ResponseEntity.ok().body(alunoDto);
     }
 }

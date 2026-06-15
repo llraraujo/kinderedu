@@ -5,7 +5,8 @@ import '../models/dashboard_model.dart';
 import '../components/header_component.dart';
 
 class DashboardView extends StatefulWidget {
-  const DashboardView({Key? key}) : super(key: key);
+  const DashboardView({Key? key, required this.cpf}) : super(key: key);
+  final String cpf;
 
   @override
   State<DashboardView> createState() => _DashboardViewState();
@@ -22,8 +23,15 @@ class _DashboardViewState extends State<DashboardView> {
   void initState() {
     super.initState();
     // Carregando os dados via Controller
-    _profile = _controller.getChildProfile();
+    carregarProfile();
     _activities = _controller.getTodayActivities();
+  }
+
+  Future<void> carregarProfile() async {
+    var profile = await _controller.getChildProfileFromDb(widget.cpf);
+    setState(() {
+      _profile = profile;
+    });
   }
 
   @override

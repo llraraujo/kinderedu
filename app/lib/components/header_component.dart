@@ -51,7 +51,7 @@ Widget header(ChildProfile profile) {
           ),
           const SizedBox(height: 20),
           Text(
-            _profile.currentDate,
+            _profile.currentDate.toString(),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 13,

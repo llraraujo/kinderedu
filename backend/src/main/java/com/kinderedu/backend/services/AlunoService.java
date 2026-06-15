@@ -1,9 +1,6 @@
 package com.kinderedu.backend.services;
 
-import com.kinderedu.backend.domain.dto.AlunoCadastroDTO;
-import com.kinderedu.backend.domain.dto.AlunoListagemDTO;
-import com.kinderedu.backend.domain.dto.AtividadeCadastroDTO;
-import com.kinderedu.backend.domain.dto.ResponsavelCadastroDTO;
+import com.kinderedu.backend.domain.dto.*;
 import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Atividade;
 import com.kinderedu.backend.domain.entities.Responsavel;
@@ -72,5 +69,15 @@ public class AlunoService {
         return this.atividadeRepository.save(atividade);
     }
 
+    public void recuperaAtividades(Long alunoId) {
+        Aluno aluno = this.alunoRepository.findById(alunoId).get();
+        List<Atividade> atividades = this.atividadeRepository.findAtividadesByAluno(aluno);
+        atividades.forEach(atividade -> System.out.println(atividade.getObservacao()));
+    }
+
+    public List<AlunoProfileDTO> alunosPorCpfResponsavel(String alunosPorCpfResponsavel){
+        var alunos = alunoRepository.findAlunosPorCpfResponsavel(alunosPorCpfResponsavel);
+        return alunos.stream().map(AlunoProfileDTO::new).toList();
+    }
 
 }
