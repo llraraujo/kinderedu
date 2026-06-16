@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:kinderedu/views/photos_view.dart';
 
 class PhotoTabNavigator extends StatelessWidget {
-  const PhotoTabNavigator({Key? key}) : super(key: key);
+  const PhotoTabNavigator({Key? key, required this.cpfResponsavel})
+    : super(key: key);
+
+  final String cpfResponsavel;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class PhotoTabNavigator extends StatelessWidget {
           settings: settings,
           builder: (BuildContext context) {
             // Rota Inicial do Diário (Lista de Anos)
-            return const PhotosView();
+            return PhotosView(cpfResponsavel: cpfResponsavel);
           },
         );
       },

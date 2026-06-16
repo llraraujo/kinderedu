@@ -1,6 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { catchError, forkJoin, of } from 'rxjs';
 
 // Importando os serviços criados anteriormente
 import { TurmaService } from '../turma/turma.service';
@@ -24,11 +25,13 @@ export class RelatoriosComponent implements OnInit {
   private turmaService = inject(TurmaService);
   private alunoService = inject(AlunoService);
   private professorService = inject(ProfessorService);
+  private cdr = inject(ChangeDetectorRef);
 
   // Armazenamento de Dados
   turmas: Turma[] = [];
   alunos: Aluno[] = [];
   professores: Professor[] = [];
+  isLoading = true;
 
   // Controle de Estado da Interface (Paineis abertos/fechados)
   paineis = {
@@ -39,9 +42,9 @@ export class RelatoriosComponent implements OnInit {
 
   // Controle das Checkboxes (Armazena os IDs selecionados para exportação)
   selecoes = {
-    turmas: new Set<string>(),
-    alunos: new Set<string>(),
-    professores: new Set<string>()
+    turmas: new Set<number>(),
+    alunos: new Set<number>(),
+    professores: new Set<number>()
   };
 
   ngOnInit(): void {
@@ -49,9 +52,36 @@ export class RelatoriosComponent implements OnInit {
   }
 
   carregarDados(): void {
-    this.turmaService.getTurmas().subscribe(data => this.turmas = data);
-    this.alunoService.getAlunos().subscribe(data => this.alunos = data);
-    this.professorService.getProfessores().subscribe(data => this.professores = data);
+    this.isLoading = true;
+    this.cdr.detectChanges();
+
+    forkJoin({
+      turmas: this.turmaService.getTurmas().pipe(
+        catchError((err) => {
+          console.error('Erro ao carregar turmas no relatorio', err);
+          return of([] as Turma[]);
+        }),
+      ),
+      alunos: this.alunoService.getAlunos().pipe(
+        catchError((err) => {
+          console.error('Erro ao carregar alunos no relatorio', err);
+          return of([] as Aluno[]);
+        }),
+      ),
+      professores: this.professorService.getProfessores().pipe(
+        catchError((err) => {
+          console.error('Erro ao carregar professores no relatorio', err);
+          return of([] as Professor[]);
+        }),
+      ),
+    }).subscribe(({ turmas, alunos, professores }) => {
+      this.turmas = turmas;
+      this.alunos = alunos;
+      this.professores = professores;
+      this.isLoading = false;
+      this.removerSelecoesInvalidas();
+      this.cdr.detectChanges();
+    });
   }
 
   // Alterna a visibilidade do painel
@@ -60,7 +90,7 @@ export class RelatoriosComponent implements OnInit {
   }
 
   // Lida com o clique nas checkboxes
-  toggleSelecao(tipo: 'turmas' | 'alunos' | 'professores', id: string): void {
+  toggleSelecao(tipo: 'turmas' | 'alunos' | 'professores', id: number): void {
     if (this.selecoes[tipo].has(id)) {
       this.selecoes[tipo].delete(id);
     } else {
@@ -79,5 +109,28 @@ export class RelatoriosComponent implements OnInit {
 
     console.log(`Exportando ${tipo} com IDs:`, idsSelecionados);
     // Aqui entraria a chamada para a API gerar o PDF ou Excel
+  }
+
+  private removerSelecoesInvalidas(): void {
+    this.sincronizarSelecao('turmas', this.turmas);
+    this.sincronizarSelecao('alunos', this.alunos);
+    this.sincronizarSelecao('professores', this.professores);
+  }
+
+  private sincronizarSelecao(
+    tipo: 'turmas' | 'alunos' | 'professores',
+    itens: Array<{ id?: number }>,
+  ): void {
+    const idsValidos = new Set(
+      itens
+        .map((item) => item.id)
+        .filter((id): id is number => id !== undefined && id !== null),
+    );
+
+    this.selecoes[tipo].forEach((id) => {
+      if (!idsValidos.has(id)) {
+        this.selecoes[tipo].delete(id);
+      }
+    });
   }
 }

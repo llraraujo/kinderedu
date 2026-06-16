@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class ActivitySummary {
   final String title;
   final int count;
@@ -20,22 +18,21 @@ class ActivitySummary {
   });
 }
 
-class ActivityFromDb{
+class ActivityFromDb {
   final String tipoAtividade;
   final int quantidade;
   final DateTime ultimaAtualizacao;
 
   ActivityFromDb({
     required this.tipoAtividade,
-    required this.quantidade, 
-    required this.ultimaAtualizacao
+    required this.quantidade,
+    required this.ultimaAtualizacao,
   });
 
-
-  ActivityFromDb.fromJson(Map<String, dynamic> json):
-  tipoAtividade = json["tipoAtividade"], 
-  quantidade = json["quantidade"], 
-  ultimaAtualizacao = DateTime.parse(json["ultimaAtualizacao"]);
-
-
+  ActivityFromDb.fromJson(Map<String, dynamic> json)
+    : tipoAtividade = json["tipoAtividade"],
+      quantidade = json["quantidade"] is int
+          ? json["quantidade"]
+          : int.parse(json["quantidade"].toString()),
+      ultimaAtualizacao = DateTime.parse(json["ultimaAtualizacao"]);
 }

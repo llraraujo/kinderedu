@@ -4,10 +4,8 @@ import com.kinderedu.backend.domain.dto.AlunoListagemMobileDTO;
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
 import com.kinderedu.backend.domain.dto.TurmaListagemDTO;
 import com.kinderedu.backend.domain.entities.Aluno;
-import com.kinderedu.backend.domain.entities.Professor;
 import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.respository.AlunoRepository;
-import com.kinderedu.backend.respository.ProfessorRepository;
 import com.kinderedu.backend.respository.TurmaRepository;
 import com.kinderedu.backend.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +18,16 @@ import java.util.List;
 public class TurmaService {
 
     private final TurmaRepository turmaRepository;
-    private final ProfessorRepository professorRepository;
     private final AlunoRepository alunoRepository;
 
     @Autowired
-    public TurmaService(TurmaRepository turmaRepository, ProfessorRepository professorRepository, AlunoRepository alunoRepository) {
+    public TurmaService(TurmaRepository turmaRepository, AlunoRepository alunoRepository) {
         this.turmaRepository = turmaRepository;
-        this.professorRepository = professorRepository;
         this.alunoRepository = alunoRepository;
     }
 
     public List<TurmaListagemDTO> todasAsTurmas() {
-        List<Turma> turmas = this.turmaRepository.findAll();
+        List<Turma> turmas = this.turmaRepository.findAllComProfessor();
         return  turmas.stream().map(TurmaListagemDTO::new).toList();
     }
 
@@ -46,11 +42,7 @@ public class TurmaService {
     }
 
     public List<AlunoListagemMobileDTO> alunosPorCpfProfessor(String professorCpf){
-        Professor professor = this.professorRepository.findByCpf(professorCpf);
-        if(professor != null && professor.getTurma() != null){
-            List<Aluno> alunos = alunoRepository.findByTurma(professor.getTurma());
-            return alunos.stream().map(AlunoListagemMobileDTO::new).toList();
-        }
-        return new java.util.ArrayList<>();
+        List<Aluno> alunos = alunoRepository.findByProfessorCpfComResponsavel(professorCpf);
+        return alunos.stream().map(AlunoListagemMobileDTO::new).toList();
     }
 }

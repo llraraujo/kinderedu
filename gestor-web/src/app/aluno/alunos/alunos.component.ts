@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,6 +19,7 @@ export class AlunosComponent implements OnInit {
   private alunoService = inject(AlunoService);
   private turmaService = inject(TurmaService);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
 
   alunos: Aluno[] = [];
@@ -32,10 +33,18 @@ export class AlunosComponent implements OnInit {
   }
 
   carregarAlunos(): void {
+    this.isLoading = true;
     this.alunoService.getAlunos().subscribe({
       next: (data) => {
-        this.alunos.push(...data);
+        this.alunos = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar alunos', err);
+        this.alunos = [];
+        this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -43,7 +52,13 @@ export class AlunosComponent implements OnInit {
   carregarTurmas(): void {
     this.turmaService.getTurmas().subscribe({
       next: (data) => {
-        this.turmas.push(...data);
+        this.turmas = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar turmas', err);
+        this.turmas = [];
+        this.cdr.detectChanges();
       },
     });
   }
@@ -58,8 +73,8 @@ export class AlunosComponent implements OnInit {
 
   onSalvarAluno(novoAluno: Aluno): void {
     this.alunoService.cadastrarAluno(novoAluno).subscribe({
-      next: (alunoCadastrado) => {
-        this.alunos.push(alunoCadastrado);
+      next: () => {
+        this.carregarAlunos();
         this.snackBar.open('Aluno cadastrado com sucesso.', 'Fechar', {
           duration: 4000,
           horizontalPosition: 'right',
@@ -67,6 +82,7 @@ export class AlunosComponent implements OnInit {
           panelClass: ['snackbar-success'],
         });
         this.closeDialog();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erro ao cadastrar aluno', err);

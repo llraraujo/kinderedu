@@ -29,7 +29,7 @@ public class AlunoProfileDTO {
             return "N/A";
         }
 
-        LocalDate nascimento = dataNascimento.toInstant()
+        LocalDate nascimento = Instant.ofEpochMilli(dataNascimento.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
 

@@ -1,10 +1,10 @@
-
 import '../models/professor_dashboard_model.dart';
+import 'package:kinderedu/services/api_config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class EducatorDashboardController {
-  final String baseURL = "http://localhost:8080";
+  final String baseURL = ApiConfig.baseUrl;
 
   // Simula o carregamento dos dados da professora logada
   ProfessorProfile getProfessorProfile() {
@@ -16,7 +16,7 @@ class EducatorDashboardController {
   }
 
   // Simula a busca dos alunos vinculados a esta turma
-  List<StudentOverview> getClassStudents() {   
+  List<StudentOverview> getClassStudents() {
     return [
       StudentOverview(
         id: 1,
@@ -49,30 +49,24 @@ class EducatorDashboardController {
     ];
   }
 
-  Future<List<StudentOverview>> getClassStudentsFromProfCpf(String cpf) async{
-   final url = Uri.parse('$baseURL/turmas/$cpf');
-   List<StudentOverview> students = [];
+  Future<List<StudentOverview>> getClassStudentsFromProfCpf(String cpf) async {
+    final url = Uri.parse('$baseURL/turmas/$cpf');
+    List<StudentOverview> students = [];
     try {
-     final response = await http.get(url);
+      final response = await http.get(url);
 
-     if (response.statusCode == 200) {
-        var decoded = jsonDecode(response.body, reviver: (key, value ) {
-
-        if(value is Map){
-          return StudentOverview(id: value["id"], 
-            name: value["name"] ,
-            age: value["age"],
-            responsibleName: value["responsibleName"] ,
-            imageUrl: value["imageUrl"]);
-        }
-        return value;
-       });      
-
-       return List<StudentOverview>.from(decoded);
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as List<dynamic>;
+        return decoded
+            .map(
+              (value) =>
+                  StudentOverview.fromJson(value as Map<String, dynamic>),
+            )
+            .toList();
       } else {
         print('Server Error: ${response.statusCode}');
-       }
-      } catch (e) {
+      }
+    } catch (e) {
       print('Connection Error: $e');
     }
 

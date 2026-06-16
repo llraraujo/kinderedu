@@ -2,7 +2,6 @@ package com.kinderedu.backend.api;
 
 import com.kinderedu.backend.domain.dto.ProfessorCadastroDTO;
 import com.kinderedu.backend.domain.dto.ProfessorListagemDTO;
-import com.kinderedu.backend.domain.entities.Professor;
 import com.kinderedu.backend.services.ProfessorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -30,9 +29,9 @@ public class ProfessorController extends  BaseController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Professor> create(@RequestBody ProfessorCadastroDTO professorDto){
-        Professor professor = professorService.create(professorDto);
+    public ResponseEntity<ProfessorListagemDTO> create(@RequestBody ProfessorCadastroDTO professorDto){
+        var professor = professorService.create(professorDto);
         URI uri = createRouteUri(professor.getIdProfessor());
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(new ProfessorListagemDTO(professor));
     }
 }

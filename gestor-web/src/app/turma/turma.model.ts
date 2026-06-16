@@ -1,8 +1,9 @@
 export interface Turma {
-  id?: string;
+  id?: number;
   nome: string;
   anoSerie: string;
-  turno: 'Manhã' | 'Tarde' | 'Integral';
+  turno: 'MANHA' | 'TARDE' | 'INTEGRAL';
   capacidade: number;
   professor?: string;
+  nomeProfessor?: string;
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { DashboardService } from './dashboard.service';
@@ -14,11 +14,21 @@ import { DashboardStats } from './dashboard.model';
 export class DashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   stats: DashboardStats = { turmasCount: 0, professoresCount: 0, alunosCount: 0 };
 
   ngOnInit(): void {
-    this.dashboardService.getStats().subscribe(data => this.stats = data);
+    this.dashboardService.getStats().subscribe({
+      next: (data) => {
+        this.stats = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar dashboard', err);
+        this.cdr.detectChanges();
+      },
+    });
   }
 
   logout(): void {

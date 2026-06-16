@@ -10,6 +10,21 @@ class PhotoGallery {
     required this.description,
     required this.time,
   });
+
+  factory PhotoGallery.fromJson(Map<String, dynamic> json, String baseUrl) {
+    final rawImageUrl = json['imageUrl']?.toString() ?? '';
+    final resolvedImageUrl = rawImageUrl.startsWith('http')
+        ? rawImageUrl
+        : '$baseUrl$rawImageUrl';
+
+    return PhotoGallery(
+      imageUrl: resolvedImageUrl,
+      description: json['description']?.toString().isNotEmpty == true
+          ? json['description'].toString()
+          : 'Foto da rotina',
+      time: json['time']?.toString() ?? '',
+    );
+  }
 }
 
 class PhotoEntry {
@@ -17,11 +32,7 @@ class PhotoEntry {
   final IconData icon;
   final Color iconColor;
 
-  PhotoEntry({
-    required this.year,
-    required this.icon,
-    required this.iconColor,
-  });
+  PhotoEntry({required this.year, required this.icon, required this.iconColor});
 }
 
 class PhotoMonth {
@@ -30,12 +41,11 @@ class PhotoMonth {
   final Color iconColor;
 
   PhotoMonth({
-    required this.month, 
-    required this.icon, 
-    required this.iconColor
+    required this.month,
+    required this.icon,
+    required this.iconColor,
   });
 }
-
 
 class PhotoDayEntry {
   final int day;

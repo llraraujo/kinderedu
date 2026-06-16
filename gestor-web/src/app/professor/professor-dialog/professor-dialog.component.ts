@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { TurmaService } from '../../turma/turma.service';
 import { Turma } from '../../turma/turma.model';
 
 @Component({
@@ -15,13 +14,10 @@ export class ProfessorDialogComponent {
   @Output() closeDialog = new EventEmitter<void>();
   @Output() saveProfessor = new EventEmitter<any>();
   @Input() turmas: Turma[] = [];
-  private turmaService = inject(TurmaService);
 
   private fb = inject(FormBuilder);
 
   professorForm: FormGroup;
-
-  // Mock de turmas para o select
 
   constructor() {
     this.professorForm = this.fb.group({
@@ -30,14 +26,6 @@ export class ProfessorDialogComponent {
       cpf: ['', [Validators.required, Validators.pattern(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/)]],
       telefone: ['', [Validators.required]],
       idTurma: ['', Validators.required],
-    });
-  }
-  carregarTurmas(): void {
-    this.turmaService.getTurmas().subscribe({
-      next: (data) => {
-        console.log('Turmas carregadas:', data);
-        this.turmas.push(...data);
-      },
     });
   }
 

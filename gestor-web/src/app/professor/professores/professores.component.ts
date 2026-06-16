@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,6 +19,7 @@ export class ProfessoresComponent implements OnInit {
   private professorService = inject(ProfessorService);
   private turmaService = inject(TurmaService);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
 
   professores: Professor[] = [];
@@ -32,10 +33,18 @@ export class ProfessoresComponent implements OnInit {
   }
 
   carregarProfessores(): void {
+    this.isLoading = true;
     this.professorService.getProfessores().subscribe({
       next: (data) => {
         this.professores = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar professores', err);
+        this.professores = [];
+        this.isLoading = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -44,6 +53,12 @@ export class ProfessoresComponent implements OnInit {
     this.turmaService.getTurmas().subscribe({
       next: (data) => {
         this.turmas = data;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar turmas', err);
+        this.turmas = [];
+        this.cdr.detectChanges();
       },
     });
   }
@@ -59,8 +74,9 @@ export class ProfessoresComponent implements OnInit {
 
   onSalvarProfessor(novoProfessor: Professor): void {
     this.professorService.cadastrarProfessor(novoProfessor).subscribe({
-      next: (profCadastrado) => {
-        this.professores.push(profCadastrado);
+      next: () => {
+        this.carregarProfessores();
+        this.carregarTurmas();
         this.snackBar.open('Professor cadastrado com sucesso.', 'Fechar', {
           duration: 4000,
           horizontalPosition: 'right',
@@ -68,6 +84,7 @@ export class ProfessoresComponent implements OnInit {
           panelClass: ['snackbar-success']
         });
         this.closeDialog();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erro ao cadastrar professor', err);

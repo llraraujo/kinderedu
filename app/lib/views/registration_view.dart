@@ -5,11 +5,13 @@ import '../models/registration_model.dart';
 class RegistrationView extends StatefulWidget {
   final String studentName;
   final String studentId;
+  final String professorCpf;
 
   const RegistrationView({
     Key? key,
     required this.studentName,
     required this.studentId,
+    required this.professorCpf,
   }) : super(key: key);
 
   @override
@@ -95,10 +97,12 @@ class _RegistrationViewState extends State<RegistrationView> {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: isActive ? activeColor.withOpacity(0.3) : Colors.black.withOpacity(0.02),
+              color: isActive
+                  ? activeColor.withOpacity(0.3)
+                  : Colors.black.withOpacity(0.02),
               blurRadius: 8,
               offset: const Offset(0, 4),
-            )
+            ),
           ],
         ),
         child: Row(
@@ -151,7 +155,14 @@ class _RegistrationViewState extends State<RegistrationView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2D3142),
+          ),
+        ),
         const SizedBox(height: 12),
         TextField(
           controller: controller,
@@ -182,7 +193,14 @@ class _RegistrationViewState extends State<RegistrationView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Text('Registro de Sono', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
+        const Text(
+          'Registro de Sono',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2D3142),
+          ),
+        ),
         const SizedBox(height: 16),
         Row(
           children: [
@@ -190,8 +208,12 @@ class _RegistrationViewState extends State<RegistrationView> {
               label: 'Início do Sono',
               time: _controller.startTime,
               onTap: () async {
-                final selected = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-                if (selected != null) setState(() => _controller.startTime = selected);
+                final selected = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (selected != null)
+                  setState(() => _controller.startTime = selected);
               },
             ),
             const SizedBox(width: 16),
@@ -199,8 +221,12 @@ class _RegistrationViewState extends State<RegistrationView> {
               label: 'Fim do Sono',
               time: _controller.endTime,
               onTap: () async {
-                final selected = await showTimePicker(context: context, initialTime: TimeOfDay.now());
-                if (selected != null) setState(() => _controller.endTime = selected);
+                final selected = await showTimePicker(
+                  context: context,
+                  initialTime: TimeOfDay.now(),
+                );
+                if (selected != null)
+                  setState(() => _controller.endTime = selected);
               },
             ),
           ],
@@ -211,7 +237,11 @@ class _RegistrationViewState extends State<RegistrationView> {
     );
   }
 
-  Widget _buildTimeCard({required String label, required TimeOfDay? time, required VoidCallback onTap}) {
+  Widget _buildTimeCard({
+    required String label,
+    required TimeOfDay? time,
+    required VoidCallback onTap,
+  }) {
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
@@ -225,11 +255,22 @@ class _RegistrationViewState extends State<RegistrationView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600], fontWeight: FontWeight.w500)),
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey[600],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
               const SizedBox(height: 8),
               Text(
                 time != null ? time.format(context) : '--:--',
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2D3142),
+                ),
               ),
             ],
           ),
@@ -240,16 +281,25 @@ class _RegistrationViewState extends State<RegistrationView> {
 
   Widget _buildSaveButton(Color color) {
     return ElevatedButton(
-      onPressed: () async{
-        final success = await _controller.saveRegistration(widget.studentId);
+      onPressed: () async {
+        final success = await _controller.saveRegistration(
+          widget.studentId,
+          widget.professorCpf,
+        );
         if (success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Registro salvo com sucesso!'), backgroundColor: Colors.green),
+            const SnackBar(
+              content: Text('Registro salvo com sucesso!'),
+              backgroundColor: Colors.green,
+            ),
           );
           Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Por favor, preencha todos os campos.'), backgroundColor: Colors.redAccent),
+            const SnackBar(
+              content: Text('Por favor, preencha todos os campos.'),
+              backgroundColor: Colors.redAccent,
+            ),
           );
         }
       },
@@ -259,7 +309,14 @@ class _RegistrationViewState extends State<RegistrationView> {
         padding: const EdgeInsets.symmetric(vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
-      child: const Text('Salvar Registro', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16)),
+      child: const Text(
+        'Salvar Registro',
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
+      ),
     );
   }
 }

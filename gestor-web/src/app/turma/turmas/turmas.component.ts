@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -16,6 +16,7 @@ import { Turma } from '../turma.model';
 export class TurmasComponent implements OnInit {
   private turmaService = inject(TurmaService);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
   turmas: Turma[] = [];
   isModalOpen: boolean = false;
   isLoading: boolean = true;
@@ -25,12 +26,18 @@ export class TurmasComponent implements OnInit {
   }
 
   carregarTurmas(): void {
-
+    this.isLoading = true;
     this.turmaService.getTurmas().subscribe({
       next:  (data) => {
-        console.log('Turmas carregadas:', data);
-        this.turmas.push(...data);
+        this.turmas = data;
         this.isLoading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erro ao carregar turmas', err);
+        this.turmas = [];
+        this.isLoading = false;
+        this.cdr.detectChanges();
       }
     });
   }
@@ -45,17 +52,16 @@ export class TurmasComponent implements OnInit {
 
   onSalvarTurma(novaTurma: Turma): void {
     this.turmaService.cadastrarTurma(novaTurma).subscribe({
-      next: (turmaCadastrada) => {
-        console.log('Turma cadastrada:', turmaCadastrada);
-        this.turmas.push(turmaCadastrada); // Atualiza a lista
-        console.log('Turmas atualizadas:', this.turmas);
+      next: () => {
+        this.carregarTurmas();
         this.snackBar.open('Turma cadastrada com sucesso.', 'Fechar', {
           duration: 4000,
           horizontalPosition: 'right',
           verticalPosition: 'top',
           panelClass: ['snackbar-success']
         });
-        this.closeDialog(); // Fecha o modal
+        this.closeDialog();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erro ao cadastrar turma', err);

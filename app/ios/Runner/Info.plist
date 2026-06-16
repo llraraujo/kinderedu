@@ -26,6 +26,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Permitir que o KinderEdu registre fotos dos alunos.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Permitir que o KinderEdu selecione fotos da galeria.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

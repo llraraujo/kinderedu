@@ -4,7 +4,6 @@ package com.kinderedu.backend.api;
 import com.kinderedu.backend.domain.dto.AlunoListagemMobileDTO;
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
 import com.kinderedu.backend.domain.dto.TurmaListagemDTO;
-import com.kinderedu.backend.domain.entities.Turma;
 import com.kinderedu.backend.services.AlunoService;
 import com.kinderedu.backend.services.ProfessorService;
 import com.kinderedu.backend.services.TurmaService;
@@ -48,10 +47,10 @@ public class TurmaController  extends BaseController{
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiResponses({@ApiResponse(responseCode = "201")})
-    public ResponseEntity<Turma> create(@RequestBody TurmaCadastroDTO turmaCadastroDTO){
-        Turma turma = this.turmaService.create(turmaCadastroDTO);
+    public ResponseEntity<TurmaListagemDTO> create(@RequestBody TurmaCadastroDTO turmaCadastroDTO){
+        var turma = this.turmaService.create(turmaCadastroDTO);
         URI uri = createRouteUri(turma.getIdTurma());
-        return ResponseEntity.created(uri).build();
+        return ResponseEntity.created(uri).body(new TurmaListagemDTO(turma));
     }
 
 }

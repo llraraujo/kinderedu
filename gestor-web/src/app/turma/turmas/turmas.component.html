@@ -50,10 +50,10 @@
                 <span>{{ turma.capacidade }} vagas</span>
               </div>
 
-              @if (turma.professor) {
+              @if (turma.nomeProfessor || turma.professor) {
                 <div class="meta-item">
                   <span class="material-icons-outlined">school</span>
-                  <span>{{ turma.professor }}</span>
+                  <span>{{ turma.nomeProfessor || turma.professor }}</span>
                 </div>
               } @else {
                 <div class="meta-item muted">

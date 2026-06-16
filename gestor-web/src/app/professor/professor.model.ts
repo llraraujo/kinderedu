@@ -1,5 +1,5 @@
 export interface Professor {
-  id?: string;
+  id?: number;
   nomeCompleto: string;
   emailInstitucional: string;
   cpf: string;

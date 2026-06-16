@@ -14,6 +14,15 @@ public interface AlunoRepository extends JpaRepository<Aluno,Long>{
     @Query("""
             select aluno
             from Aluno aluno
+            join fetch aluno.responsavel
+            join Professor professor on professor.turma = aluno.turma
+            where professor.cpf = :professorCpf
+            """)
+    List<Aluno> findByProfessorCpfComResponsavel(@Param("professorCpf") String professorCpf);
+
+    @Query("""
+            select aluno
+            from Aluno aluno
             join fetch aluno.turma
             join fetch aluno.responsavel
             """)

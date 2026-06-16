@@ -12,8 +12,13 @@ import com.kinderedu.backend.respository.TurmaRepository;
 import com.kinderedu.backend.util.Mapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -62,8 +67,8 @@ public class AlunoService {
     }
 
     @Transactional
-    public Atividade cadastrarAtividade(Long alunoId, AtividadeCadastroDTO atividadeDto) {
-        Aluno aluno = this.alunoRepository.findById(alunoId).get();
+    public Atividade cadastrarAtividade(Long alunoId, String cpfProfessor, AtividadeCadastroDTO atividadeDto) {
+        Aluno aluno = recuperarAlunoDoProfessor(alunoId, cpfProfessor);
         Atividade atividade = Mapper.convertDtoToEntity(atividadeDto);
         atividade.setAluno(aluno);
         return this.atividadeRepository.save(atividade);
@@ -85,4 +90,41 @@ public class AlunoService {
         return alunos.stream().map(AlunoProfileDTO::new).toList();
     }
 
+    @Transactional
+    public List<AtividadeListagemDTO> listarAtividadesPorDia(Long alunoId, String cpfResponsavel, LocalDate data) {
+        recuperarAlunoDoResponsavel(alunoId, cpfResponsavel);
+
+        Date inicio = Date.from(data.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date fim = Date.from(data.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        return atividadeRepository
+                .findAtividadesPorAlunoResponsavelEData(alunoId, cpfResponsavel, inicio, fim)
+                .stream()
+                .map(AtividadeListagemDTO::new)
+                .toList();
+    }
+
+    private Aluno recuperarAlunoDoResponsavel(Long alunoId, String cpfResponsavel) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno nao encontrado."));
+
+        if (aluno.getResponsavel() == null || !cpfResponsavel.equals(aluno.getResponsavel().getCpf())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Responsavel nao autorizado para este aluno.");
+        }
+
+        return aluno;
+    }
+
+    private Aluno recuperarAlunoDoProfessor(Long alunoId, String cpfProfessor) {
+        Aluno aluno = alunoRepository.findById(alunoId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Aluno nao encontrado."));
+
+        if (aluno.getTurma() == null
+                || aluno.getTurma().getProfessor() == null
+                || !cpfProfessor.equals(aluno.getTurma().getProfessor().getCpf())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Professor nao autorizado para este aluno.");
+        }
+
+        return aluno;
+    }
 }

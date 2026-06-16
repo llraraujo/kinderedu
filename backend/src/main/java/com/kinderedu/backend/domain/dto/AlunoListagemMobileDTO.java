@@ -2,6 +2,7 @@ package com.kinderedu.backend.domain.dto;
 
 import com.kinderedu.backend.domain.entities.Aluno;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -71,7 +72,7 @@ public class AlunoListagemMobileDTO {
             return "N/A";
         }
 
-        LocalDate nascimento = dataNascimento.toInstant()
+        LocalDate nascimento = Instant.ofEpochMilli(dataNascimento.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();
 

@@ -26,7 +26,7 @@ public class ProfessorService {
     }
 
     public List<ProfessorListagemDTO> todosOsProfessores() {
-       List<Professor> professores = this.professorRepository.findAll();
+       List<Professor> professores = this.professorRepository.findAllComTurma();
        return professores.stream().map(ProfessorListagemDTO::new).toList();
     }
 

@@ -40,7 +40,6 @@ export class AlunoDialogComponent {
 
   onSubmit(): void {
     if (this.alunoForm.valid) {
-      this.saveAluno.emit(this.alunoForm.value);
       this.saveAluno.emit({
         ...this.alunoForm.value,
         cpf: this.onlyDigits(this.alunoForm.value.cpf),

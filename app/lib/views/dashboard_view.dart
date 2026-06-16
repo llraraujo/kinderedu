@@ -15,8 +15,8 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   // Instanciando o Controller
   final DashboardController _controller = DashboardController();
-  
-  late ChildProfile _profile;
+
+  ChildProfile? _profile;
   late List<ActivitySummary> _activities = [];
 
   @override
@@ -33,53 +33,60 @@ class _DashboardViewState extends State<DashboardView> {
     });
   }
 
-   Future<void> carregarAtividades() async {
-    var atividades = await _controller.getAtividadesFromDb(_profile.id ?? 0);
+  Future<void> carregarAtividades() async {
+    final profile = _profile;
+    if (profile == null || profile.id == null) {
+      return;
+    }
+
+    var atividades = await _controller.getAtividadesFromDb(profile.id!);
     setState(() {
       _activities = atividades;
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    final profile = _profile;
+
     return Scaffold(
       backgroundColor: Colors.grey[50],
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          header(_profile),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Resumo de Hoje',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D3142),
+      body: profile == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                header(profile),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Resumo de Hoje',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3142),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Acompanhe as atividades de ${profile.name}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        _buildActivitiesGrid(),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Acompanhe as atividades de ${_profile.name}',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  _buildActivitiesGrid(),
-                ],
-              ),
+                ),
+              ],
             ),
-          ),
-        ],
-      )
     );
   }
 
@@ -136,10 +143,7 @@ class _DashboardViewState extends State<DashboardView> {
                   const SizedBox(height: 4),
                   Text(
                     'Última: ${activity.lastTime}',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -149,6 +153,4 @@ class _DashboardViewState extends State<DashboardView> {
       },
     );
   }
-
-
 }
