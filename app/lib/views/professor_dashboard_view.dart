@@ -35,7 +35,7 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
 
   _getStudents() async {
     _controller
-        .getClassStudentsFromProfCpf(widget.user.cpf)
+        .getClassStudentsFromProfCpf(widget.user.username)
         .then(
           (value) => setState(() {
             _studentsFromDb = value;
@@ -218,7 +218,7 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                           builder: (context) => RegistrationView(
                             studentId: student.id.toString(),
                             studentName: student.name,
-                            professorCpf: widget.user.cpf,
+                            professorCpf: widget.user.username,
                           ),
                         ),
                       );
@@ -234,7 +234,7 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                         studentId: student.id.toString(),
                         studentName: student.name,
                         imageUrl: student.imageUrl,
-                        professorCpf: widget.user.cpf,
+                        professorCpf: widget.user.username,
                       );
                       Navigator.push(
                         context,

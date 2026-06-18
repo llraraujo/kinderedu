@@ -15,7 +15,7 @@ class MainView extends StatefulWidget {
 
 class _MainViewState extends State<MainView> {
   int _currentIndex = 0;
-  String get cpf => widget.user.cpf;
+  String get cpf => widget.user.username;
 
   late final List<Widget> _views = [
     DashboardView(cpf: cpf),

@@ -1,17 +1,10 @@
 package com.kinderedu.backend.config;
 
-import com.kinderedu.backend.domain.entities.Aluno;
-import com.kinderedu.backend.domain.entities.Atividade;
-import com.kinderedu.backend.domain.entities.Professor;
-import com.kinderedu.backend.domain.entities.Responsavel;
-import com.kinderedu.backend.domain.entities.Turma;
+import com.kinderedu.backend.domain.entities.*;
 import com.kinderedu.backend.domain.enums.ETipoAtividade;
 import com.kinderedu.backend.domain.enums.ETurno;
-import com.kinderedu.backend.respository.AlunoRepository;
-import com.kinderedu.backend.respository.AtividadeRespository;
-import com.kinderedu.backend.respository.ProfessorRepository;
-import com.kinderedu.backend.respository.ResponsavelRepository;
-import com.kinderedu.backend.respository.TurmaRepository;
+import com.kinderedu.backend.respository.*;
+import com.kinderedu.backend.util.Roles;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -27,26 +20,50 @@ public class DataLoader implements CommandLineRunner {
     private final ProfessorRepository professorRepository;
     private final ResponsavelRepository responsavelRepository;
     private final TurmaRepository turmaRepository;
+    private final UserRepository userRepository;
 
     public DataLoader(
             AlunoRepository alunoRepository,
             AtividadeRespository atividadeRepository,
             ProfessorRepository professorRepository,
             ResponsavelRepository responsavelRepository,
-            TurmaRepository turmaRepository
+            TurmaRepository turmaRepository,
+            UserRepository userRepository
     ) {
         this.alunoRepository = alunoRepository;
         this.atividadeRepository = atividadeRepository;
         this.professorRepository = professorRepository;
         this.responsavelRepository = responsavelRepository;
         this.turmaRepository = turmaRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public void run(String... args) {
+
+
         if (turmaRepository.count() > 0) {
             return;
         }
+
+        var gestorUser = new User();
+        gestorUser.setUsername("gestor@example.com");
+        gestorUser.setPassword("teste123");
+        gestorUser.setRole(Roles.GESTOR);
+
+        var professorUser = new User();
+        professorUser.setUsername("22222222222");
+        professorUser.setPassword("teste123");
+        professorUser.setRole(Roles.PROFESSOR);
+
+        var responsavelUser = new User();
+        responsavelUser.setUsername("11111111111");
+        responsavelUser.setPassword("teste123");
+        responsavelUser.setRole(Roles.RESPONSAVEL);
+
+        userRepository.save(professorUser);
+        userRepository.save(gestorUser);
+        userRepository.save(responsavelUser);
 
         Turma turma = new Turma();
         turma.setNome("Berçário A");

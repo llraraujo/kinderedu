@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool rememberMe = false;
   String _msgExisteUsuario = "";
 
+
    @override
    void initState() {
     super.initState();
@@ -37,6 +38,16 @@ class _LoginScreenState extends State<LoginScreen> {
        _senha.clear();
        _msgExisteUsuario = "";
     });
+  }
+
+  Future<List<User>> getUsuarios(String username) async{
+    List<User> users = [];
+     try{
+       users = await _controller.getUsers(username);
+     }catch(e){
+       print("erro ao recuperar o usuário: $e");
+     }
+    return users;
   }
 
   // Cores principais baseadas na imagem
@@ -204,26 +215,46 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // 7. Botão Entrar
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   String rawValue = maskCpf.getUnmaskedText();
-                  var user = _controller.getUsuariosCadastrados().firstWhere(
-                    (user) => user.cpf == rawValue && user.senha == _senha.text,
-                    orElse: () =>  User(cpf:"",senha:"", role: "")
-                  );
-                  if(user.cpf.isNotEmpty && user.senha.isNotEmpty){
-                    _limparCampos();
-                    if(isProfessor && user.role == "PROFESSOR"){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfessorDashboardView(user: user)));
-                      return;
-                    }
-                    if(!isProfessor && user.role == "RESPONSAVEL"){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainView(user: user)));
-                      return;
-                    }
-                  }
-                  setState(() {
-                     _msgExisteUsuario = "cpf ou senha inválido.";
-                  });                 
+                  // var user = _controller.getUsuariosCadastrados().firstWhere(
+                  //   (user) => user.username == rawValue && user.password == _senha.text,
+                  //   orElse: () =>  User(username:"",password:"", role: "")
+                  // );
+                  getUsuarios(rawValue).then((users) async{
+                     var userDb = users.firstWhere(
+                       (user) => user.username == rawValue && user.password == _senha.text,
+                        orElse: () =>  User(username:"",password:"", role: "")
+                     );
+                      if(userDb.username.isNotEmpty && userDb.password.isNotEmpty){
+                        _limparCampos();
+                      }
+                      if(isProfessor && userDb.role == "PROFESSOR"){
+                       await Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfessorDashboardView(user: userDb)));
+                       return;
+                      }
+                      if(!isProfessor && userDb.role == "RESPONSAVEL"){
+                        await Navigator.push(context, MaterialPageRoute(builder: (context) => MainView(user: userDb)));
+                        return;
+                      }
+                      setState(() {
+                        _msgExisteUsuario = "cpf ou senha inválido.";
+                      });  
+                  });
+                  // if(user.username.isNotEmpty && user.password.isNotEmpty){
+                  //   _limparCampos();
+                  //   if(isProfessor && user.role == "PROFESSOR"){
+                  //     Navigator.push(context, MaterialPageRoute(builder: (context) =>  ProfessorDashboardView(user: user)));
+                  //     return;
+                  //   }
+                  //   if(!isProfessor && user.role == "RESPONSAVEL"){
+                  //     Navigator.push(context, MaterialPageRoute(builder: (context) => MainView(user: user)));
+                  //     return;
+                  //   }
+                  // }
+                  // setState(() {
+                  //    _msgExisteUsuario = "cpf ou senha inválido.";
+                  // });                 
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,

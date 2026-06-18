@@ -1,14 +1,8 @@
 package com.kinderedu.backend.services;
 
 import com.kinderedu.backend.domain.dto.*;
-import com.kinderedu.backend.domain.entities.Aluno;
-import com.kinderedu.backend.domain.entities.Atividade;
-import com.kinderedu.backend.domain.entities.Responsavel;
-import com.kinderedu.backend.domain.entities.Turma;
-import com.kinderedu.backend.respository.AlunoRepository;
-import com.kinderedu.backend.respository.AtividadeRespository;
-import com.kinderedu.backend.respository.ResponsavelRepository;
-import com.kinderedu.backend.respository.TurmaRepository;
+import com.kinderedu.backend.domain.entities.*;
+import com.kinderedu.backend.respository.*;
 import com.kinderedu.backend.util.Mapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +22,15 @@ public class AlunoService {
     private final ResponsavelRepository responsavelRepository;
     private final TurmaRepository turmaRepository;
     private final AtividadeRespository atividadeRepository;
+    private final UserService userService;
 
     @Autowired
-    public  AlunoService(AlunoRepository alunoRepository, ResponsavelRepository responsavelRepository, TurmaRepository turmaRepository, AtividadeRespository atividaderespository) {
+    public  AlunoService(AlunoRepository alunoRepository, ResponsavelRepository responsavelRepository, TurmaRepository turmaRepository, AtividadeRespository atividaderespository, UserService userService) {
         this.alunoRepository = alunoRepository;
         this.responsavelRepository = responsavelRepository;
         this.turmaRepository = turmaRepository;
         this.atividadeRepository = atividaderespository;
+        this.userService = userService;
     }
 
     public  List<AlunoListagemDTO> todosOsAlunos() {
@@ -58,6 +54,7 @@ public class AlunoService {
             );
             responsavel =  Mapper.convertDtoToEntity(responsavelCadastroDTO);
             responsavel = responsavelRepository.save(responsavel);
+            userService.create(responsavel);
         }
 
         aluno.setResponsavel(responsavel);
@@ -65,6 +62,7 @@ public class AlunoService {
         aluno = this.alunoRepository.save(aluno);
         return aluno;
     }
+
 
     @Transactional
     public Atividade cadastrarAtividade(Long alunoId, String cpfProfessor, AtividadeCadastroDTO atividadeDto) {
