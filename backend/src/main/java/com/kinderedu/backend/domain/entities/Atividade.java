@@ -74,7 +74,7 @@ public class Atividade implements Serializable {
     }
 
     public void setAluno(Aluno aluno) {
-        aluno.addAtividade(this);
+        //aluno.addAtividade(this);
         this.aluno = aluno;
     }
 }

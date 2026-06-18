@@ -78,6 +78,7 @@ $text-light-muted: #999;
     transition: border-color 0.2s;
 
     &:focus { border-color: $primary-purple; }
+    &.is-invalid { border-color: #c62828; }
   }
 }
 
@@ -114,8 +115,8 @@ $text-light-muted: #999;
     background: $primary-purple;
     border: none;
     color: #fff;
-    &:hover { background: darken($primary-purple, 10%); }
-    &:disabled { background: lighten($primary-purple, 20%); cursor: not-allowed; }
+    &:hover { background: #7300cc; }
+    &:disabled { background: #bd66ff; cursor: not-allowed; }
   }
 }
 

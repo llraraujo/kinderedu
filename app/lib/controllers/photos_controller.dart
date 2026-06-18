@@ -1,83 +1,162 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:kinderedu/models/header_model.dart';
+import 'package:kinderedu/services/api_config.dart';
 
 import '../models/photo_model.dart';
-import 'package:kinderedu/models/header_model.dart';
 
 class PhotosController {
+  final String baseURL = ApiConfig.baseUrl;
+
   ChildProfile getChildProfile() {
     return childProfileHeader;
   }
 
+  Future<ChildProfile> getChildProfileFromDb(String cpfResponsavel) async {
+    final url = Uri.parse("$baseURL/alunos/$cpfResponsavel");
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+        return ChildProfile.fromJson(decoded);
+      }
+    } catch (e) {
+      print("Erro ao recuperar o perfil da crianca: $e");
+    }
+
+    return childProfileHeader;
+  }
+
   List<PhotoEntry> getAvailableYears() {
+    final currentYear = DateTime.now().year;
     return [
       PhotoEntry(
-        year: 2025,
+        year: currentYear,
         icon: Icons.image,
         iconColor: Colors.pinkAccent,
       ),
       PhotoEntry(
-        year: 2024,
+        year: currentYear - 1,
         icon: Icons.image,
         iconColor: Colors.pinkAccent,
       ),
     ];
   }
 
-    List<PhotoMonth>? getAvailableMonths(int year) {
-    Map<int, List<PhotoMonth>> yearMonths = {
-      2026: [
-      PhotoMonth(
-        month: "Novembro",
+  List<PhotoMonth> getAvailableMonths(int year) {
+    return const [
+      "Janeiro",
+      "Fevereiro",
+      "Marco",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+    ].map((month) {
+      return PhotoMonth(
+        month: month,
         icon: Icons.image,
         iconColor: Colors.pinkAccent,
-      ),
-      PhotoMonth(
-        month: "Outubro",
-        icon: Icons.image,
-        iconColor: Colors.pinkAccent,
-      )],
-
-      2025: [
-      PhotoMonth(
-        month: "Janeiro",
-        icon: Icons.image,
-        iconColor: Colors.pinkAccent,
-      ),
-      PhotoMonth(
-        month: "Fevereiro",
-        icon: Icons.image,
-        iconColor: Colors.pinkAccent,
-      )]
-    };
-
-    return yearMonths[year];
-  }
-
-  List<PhotoDayEntry> getDaysForMonth(String month, int year) {
-    
-    return List.generate(12, (index) => 27 - index).map((day) {
-      return PhotoDayEntry(day: day, month: month, year: year);
+      );
     }).toList();
   }
 
-  // Simula a busca das fotos postadas no dia
-  List<PhotoGallery> getPhotosGallery(DateTime date) {
-    return [
-      PhotoGallery(
-        imageUrl: 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80', // Exemplo de crianças brincando
-        description: 'Brincando com os blocos de montar',
-        time: '14:30',
-      ),
-      PhotoGallery(
-        imageUrl: 'https://images.unsplash.com/photo-1603354350317-6f7aaa5911c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80', // Exemplo de música
-        description: 'Atividade de música e artes',
-        time: '11:00',
-      ),
-      PhotoGallery(
-        imageUrl: 'https://images.unsplash.com/photo-1519689680058-324335c77eba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80', // Exemplo de bebê
-        description: 'Hora do lanche da manhã',
-        time: '09:30',
-      ),
+  List<PhotoDayEntry> getDaysForMonth(String month, int year) {
+    final monthNumber = monthNumberFromName(month);
+    final daysInMonth = DateUtils.getDaysInMonth(year, monthNumber);
+
+    return List.generate(
+      daysInMonth,
+      (index) => daysInMonth - index,
+    ).map((day) => PhotoDayEntry(day: day, month: month, year: year)).toList();
+  }
+
+  Future<List<PhotoGallery>> getPhotosGalleryFromDb({
+    required int alunoId,
+    required String cpfResponsavel,
+    required DateTime date,
+  }) async {
+    final formattedDate = date.toIso8601String().split('T').first;
+    final url = Uri.parse('$baseURL/alunos/$alunoId/fotos').replace(
+      queryParameters: {
+        'cpfResponsavel': cpfResponsavel,
+        'data': formattedDate,
+      },
+    );
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as List<dynamic>;
+        return decoded
+            .map(
+              (value) =>
+                  PhotoGallery.fromJson(value as Map<String, dynamic>, baseURL),
+            )
+            .toList();
+      }
+      print('Erro ao recuperar fotos: ${response.statusCode}');
+    } catch (e) {
+      print('Erro ao recuperar fotos: $e');
+    }
+
+    return [];
+  }
+
+  int monthNumberFromName(String month) {
+    switch (month.trim().toUpperCase()) {
+      case "JANEIRO":
+        return 1;
+      case "FEVEREIRO":
+        return 2;
+      case "MARCO":
+        return 3;
+      case "ABRIL":
+        return 4;
+      case "MAIO":
+        return 5;
+      case "JUNHO":
+        return 6;
+      case "JULHO":
+        return 7;
+      case "AGOSTO":
+        return 8;
+      case "SETEMBRO":
+        return 9;
+      case "OUTUBRO":
+        return 10;
+      case "NOVEMBRO":
+        return 11;
+      case "DEZEMBRO":
+        return 12;
+      default:
+        return DateTime.now().month;
+    }
+  }
+
+  String monthNameFromNumber(int month) {
+    const months = [
+      "",
+      "Janeiro",
+      "Fevereiro",
+      "Marco",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
     ];
+    return months[month];
   }
 }

@@ -6,7 +6,9 @@ import '../controllers/photos_controller.dart';
 import '../models/photo_model.dart';
 
 class PhotosView extends StatefulWidget {
-  const PhotosView({Key? key}) : super(key: key);
+  const PhotosView({Key? key, required this.cpfResponsavel}) : super(key: key);
+
+  final String cpfResponsavel;
 
   @override
   State<PhotosView> createState() => _PhotosViewState();
@@ -15,39 +17,54 @@ class PhotosView extends StatefulWidget {
 class _PhotosViewState extends State<PhotosView> {
   final PhotosController _controller = PhotosController();
   late List<PhotoEntry> _years;
-  late ChildProfile _profile;
+  ChildProfile? _profile;
 
   @override
   void initState() {
     super.initState();
     _years = _controller.getAvailableYears();
-    _profile = _controller.getChildProfile();
+    _loadProfile();
   }
 
-    @override
+  Future<void> _loadProfile() async {
+    final profile = await _controller.getChildProfileFromDb(
+      widget.cpfResponsavel,
+    );
+    if (!mounted) {
+      return;
+    }
+    setState(() {
+      _profile = profile;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final profile = _profile;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FE), // Fundo levemente azulado/cinza
-      body: Column(
-        children: [
-          header(_profile),
-          Expanded(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  _buildTitleCard(),
-                  const SizedBox(height: 25),
-                  _buildYearsList(),
-                ],
-              ),
+      body: profile == null
+          ? const Center(child: CircularProgressIndicator())
+          : Column(
+              children: [
+                header(profile),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        _buildTitleCard(),
+                        const SizedBox(height: 25),
+                        _buildYearsList(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
-
 
   // Card informativo superior
   Widget _buildTitleCard() {
@@ -56,21 +73,36 @@ class _PhotosViewState extends State<PhotosView> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+        ],
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(color: Colors.blue.withOpacity(0.1), borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+              color: Colors.blue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: const Icon(Icons.image_outlined, color: Colors.blue),
           ),
           const SizedBox(width: 15),
           const Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Galeria de fotos', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142))),
-              Text('Selecione o Ano', style: TextStyle(fontSize: 14, color: Colors.grey)),
+              Text(
+                'Galeria de fotos',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2D3142),
+                ),
+              ),
+              Text(
+                'Selecione o Ano',
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
             ],
           ),
         ],
@@ -78,7 +110,7 @@ class _PhotosViewState extends State<PhotosView> {
     );
   }
 
-    // Lista de anos para seleção
+  // Lista de anos para seleção
   Widget _buildYearsList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -90,15 +122,28 @@ class _PhotosViewState extends State<PhotosView> {
           padding: const EdgeInsets.only(bottom: 15),
           child: InkWell(
             onTap: () {
-              
-              Navigator.push(context, MaterialPageRoute(builder: (context) => PhotoMonthView(year: yearEntry.year, profile: _profile)));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PhotoMonthView(
+                    year: yearEntry.year,
+                    profile: _profile!,
+                    cpfResponsavel: widget.cpfResponsavel,
+                  ),
+                ),
+              );
             },
             child: Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(20),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.02),
+                    blurRadius: 10,
+                  ),
+                ],
               ),
               child: Row(
                 children: [
@@ -113,7 +158,11 @@ class _PhotosViewState extends State<PhotosView> {
                   const SizedBox(width: 20),
                   Text(
                     yearEntry.year.toString(),
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF2D3142)),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xFF2D3142),
+                    ),
                   ),
                   const Spacer(),
                   const Icon(Icons.chevron_right, color: Colors.grey),
@@ -125,8 +174,6 @@ class _PhotosViewState extends State<PhotosView> {
       },
     );
   }
-
-  
 }
 
 /*

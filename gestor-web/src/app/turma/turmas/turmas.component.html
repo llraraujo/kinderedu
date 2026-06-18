@@ -24,12 +24,46 @@
       <div class="empty-state">
         <span class="material-icons-outlined empty-icon">menu_book</span>
         <h3>Nenhuma turma cadastrada</h3>
-        <p>Clique em "Nova Turma" para começar</p>
+        <p>Clique em "Nova Turma" para come&ccedil;ar</p>
       </div>
     }
 
-    @if (turmas.length > 0) {
+    @else if (turmas.length > 0) {
       <div class="turmas-grid">
+        @for (turma of turmas; track turma.id ?? $index) {
+          <button type="button" class="turma-card" (click)="navigateTo(turma?.id)">
+            <div class="card-header">
+              <div class="class-icon">
+                <span class="material-icons-outlined">menu_book</span>
+              </div>
+              <span class="turno-badge">{{ turma.turno }}</span>
+            </div>
+
+            <div class="card-body">
+              <h2>{{ turma.nome }}</h2>
+              <p>{{ turma.anoSerie }}</p>
+            </div>
+
+            <div class="card-footer">
+              <div class="meta-item">
+                <span class="material-icons-outlined">groups</span>
+                <span>{{ turma.capacidade }} vagas</span>
+              </div>
+
+              @if (turma.nomeProfessor || turma.professor) {
+                <div class="meta-item">
+                  <span class="material-icons-outlined">school</span>
+                  <span>{{ turma.nomeProfessor || turma.professor }}</span>
+                </div>
+              } @else {
+                <div class="meta-item muted">
+                  <span class="material-icons-outlined">school</span>
+                  <span>Sem professor</span>
+                </div>
+              }
+            </div>
+          </button>
+        }
       </div>
     }
   </main>

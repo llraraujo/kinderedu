@@ -18,7 +18,13 @@
           </div>
           <div class="text-wrapper">
             <h3>Relatório de Turmas</h3>
-            <p>{{ turmas.length }} turma(s) cadastrada(s)</p>
+            <p>
+              @if (isLoading) {
+                Carregando turmas...
+              } @else {
+                {{ turmas.length }} turma(s) cadastrada(s)
+              }
+            </p>
           </div>
         </div>
 
@@ -65,7 +71,13 @@
           </div>
           <div class="text-wrapper">
             <h3>Relatório de Alunos e Responsáveis</h3>
-            <p>{{ alunos.length }} aluno(s) cadastrado(s)</p>
+            <p>
+              @if (isLoading) {
+                Carregando alunos...
+              } @else {
+                {{ alunos.length }} aluno(s) cadastrado(s)
+              }
+            </p>
           </div>
         </div>
 
@@ -112,7 +124,13 @@
           </div>
           <div class="text-wrapper">
             <h3>Relatório de Professores</h3>
-            <p>{{ professores.length }} professor(es) cadastrado(s)</p>
+            <p>
+              @if (isLoading) {
+                Carregando professores...
+              } @else {
+                {{ professores.length }} professor(es) cadastrado(s)
+              }
+            </p>
           </div>
         </div>
 

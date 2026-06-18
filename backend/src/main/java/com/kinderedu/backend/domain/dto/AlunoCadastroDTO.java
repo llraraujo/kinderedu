@@ -4,32 +4,36 @@ import java.util.Date;
 
 public class AlunoCadastroDTO {
 
-    private String nome;
+    private String nomeCompleto;
     private String matricula;
-    private String fichaMedica;
-    private byte[] foto;
     private Date dataNascimento;
-    ResponsavelCadastroDTO responsavelDTO;
-    private Long idTurma;
+    private Long turmaId;
+    private String nomeResponsavel;
+    private String cpf;
+    private String email;
+    private String telefone;
 
-    public AlunoCadastroDTO(){}
+    public AlunoCadastroDTO(){
 
-    public AlunoCadastroDTO(String nome, String matricula, String fichaMedica, byte[] foto, Date dataNascimento, ResponsavelCadastroDTO responsavelDTO, Long idTurma) {
-        this.nome = nome;
+    }
+
+    public AlunoCadastroDTO(String nomeCompleto, String matricula, Date dataNascimento, Long turmaId, String nomeResponsavel, String cpf, String email, String telefone) {
+        this.nomeCompleto = nomeCompleto;
         this.matricula = matricula;
-        this.fichaMedica = fichaMedica;
-        this.foto = foto;
         this.dataNascimento = dataNascimento;
-        this.responsavelDTO = responsavelDTO;
-        this.idTurma = idTurma;
+        this.turmaId = turmaId;
+        this.nomeResponsavel = nomeResponsavel;
+        this.cpf = cpf;
+        this.email = email;
+        this.telefone = telefone;
     }
 
-    public String getNome() {
-        return nome;
+    public String getNomeCompleto() {
+        return nomeCompleto;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setNomeCompleto(String nomeCompleto) {
+        this.nomeCompleto = nomeCompleto;
     }
 
     public String getMatricula() {
@@ -40,22 +44,6 @@ public class AlunoCadastroDTO {
         this.matricula = matricula;
     }
 
-    public String getFichaMedica() {
-        return fichaMedica;
-    }
-
-    public void setFichaMedica(String fichaMedica) {
-        this.fichaMedica = fichaMedica;
-    }
-
-    public byte[] getFoto() {
-        return foto;
-    }
-
-    public void setFoto(byte[] foto) {
-        this.foto = foto;
-    }
-
     public Date getDataNascimento() {
         return dataNascimento;
     }
@@ -64,19 +52,43 @@ public class AlunoCadastroDTO {
         this.dataNascimento = dataNascimento;
     }
 
-    public ResponsavelCadastroDTO getResponsavelDTO() {
-        return responsavelDTO;
+    public Long getTurmaId() {
+        return turmaId;
     }
 
-    public void setResponsavelDTO(ResponsavelCadastroDTO responsavelDTO) {
-        this.responsavelDTO = responsavelDTO;
+    public void setTurmaId(Long turmaId) {
+        this.turmaId = turmaId;
     }
 
-    public Long getIdTurma() {
-        return idTurma;
+    public String getNomeResponsavel() {
+        return nomeResponsavel;
     }
 
-    public void setIdTurma(Long idTurma) {
-        this.idTurma = idTurma;
+    public void setNomeResponsavel(String nomeResponsavel) {
+        this.nomeResponsavel = nomeResponsavel;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

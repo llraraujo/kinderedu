@@ -5,15 +5,18 @@ import 'package:kinderedu/models/header_model.dart';
 import 'package:kinderedu/models/photo_model.dart';
 import 'package:kinderedu/views/photo_gallery_view.dart';
 
-
 class PhotoDayView extends StatefulWidget {
   final String month;
   final int year;
+  final ChildProfile profile;
+  final String cpfResponsavel;
 
   const PhotoDayView({
     Key? key,
     required this.month,
     required this.year,
+    required this.profile,
+    required this.cpfResponsavel,
   }) : super(key: key);
 
   @override
@@ -22,23 +25,16 @@ class PhotoDayView extends StatefulWidget {
 
 class _DiaryDayViewState extends State<PhotoDayView> {
   final PhotosController _controller = PhotosController();
-  late ChildProfile _profile;
   late List<PhotoDayEntry> _days;
 
   @override
   void initState() {
     super.initState();
-    _profile = _controller.getChildProfile();
     _days = _controller.getDaysForMonth(widget.month, widget.year);
   }
 
-  int getMonth(String month){
-    switch(month.trim().toUpperCase()){
-      case "OUTUBRO": return 10;
-      case "NOVEMBRO": return 11;
-      case "DEZEMBRO": return 12;
-      default: return -1;
-    }    
+  int getMonth(String month) {
+    return _controller.monthNumberFromName(month);
   }
 
   @override
@@ -47,7 +43,7 @@ class _DiaryDayViewState extends State<PhotoDayView> {
       backgroundColor: const Color(0xFFF8F9FE),
       body: Column(
         children: [
-          header(_profile),
+          header(widget.profile),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -65,8 +61,6 @@ class _DiaryDayViewState extends State<PhotoDayView> {
     );
   }
 
-  
-
   // Card com seta de voltar e título do mês
   Widget _buildNavigationHeader(BuildContext context) {
     return Container(
@@ -74,7 +68,9 @@ class _DiaryDayViewState extends State<PhotoDayView> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+        ],
       ),
       child: Row(
         children: [
@@ -96,7 +92,11 @@ class _DiaryDayViewState extends State<PhotoDayView> {
             children: [
               const Text(
                 'Galeria de Fotos',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2D3142),
+                ),
               ),
               Text(
                 '${widget.month} de ${widget.year}',
@@ -126,23 +126,45 @@ class _DiaryDayViewState extends State<PhotoDayView> {
         return InkWell(
           onTap: () {
             // Aqui navegaria para a Timeline (DiaryView) do dia específico
-            Navigator.push(context, MaterialPageRoute(builder: (context) => PhotoGalleryView(date: DateTime(widget.year, getMonth(widget.month),dayEntry.day),)));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PhotoGalleryView(
+                  date: DateTime(
+                    widget.year,
+                    getMonth(widget.month),
+                    dayEntry.day,
+                  ),
+                  profile: widget.profile,
+                  cpfResponsavel: widget.cpfResponsavel,
+                ),
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.grey.withOpacity(0.1)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 5)],
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 5),
+              ],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.image, color: Color(0xFF4ADE80), size: 28), // Ícone verde
+                const Icon(
+                  Icons.image,
+                  color: Color(0xFF4ADE80),
+                  size: 28,
+                ), // Ícone verde
                 const SizedBox(height: 8),
                 Text(
                   'Dia ${dayEntry.day}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
                 const Text(
                   'Ver fotos',

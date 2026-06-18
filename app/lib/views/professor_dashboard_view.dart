@@ -9,7 +9,8 @@ import '../controllers/professor_dashboard_controller.dart';
 import '../models/professor_dashboard_model.dart';
 
 class ProfessorDashboardView extends StatefulWidget {
-  const ProfessorDashboardView({Key? key, required this.user}) : super(key: key);
+  const ProfessorDashboardView({Key? key, required this.user})
+    : super(key: key);
   final User user;
 
   @override
@@ -18,15 +19,28 @@ class ProfessorDashboardView extends StatefulWidget {
 
 class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
   final EducatorDashboardController _controller = EducatorDashboardController();
-  
+
   late ProfessorProfile _profile;
   late List<StudentOverview> _students;
+  late List<StudentOverview> _studentsFromDb;
 
   @override
   void initState() {
     super.initState();
     _profile = _controller.getProfessorProfile();
     _students = _controller.getClassStudents();
+    _studentsFromDb = [];
+    _getStudents();
+  }
+
+  _getStudents() async {
+    _controller
+        .getClassStudentsFromProfCpf(widget.user.cpf)
+        .then(
+          (value) => setState(() {
+            _studentsFromDb = value;
+          }),
+        );
   }
 
   @override
@@ -77,7 +91,10 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
               icon: const Icon(Icons.logout_outlined, color: Color(0xFF2D3142)),
               onPressed: () {
                 // Lógica de logout
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                );
               },
             ),
           ],
@@ -85,11 +102,15 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
         const SizedBox(height: 20),
         Text(
           'Olá, ${_profile.name}!',
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2D3142),
+          ),
         ),
         const SizedBox(height: 4),
         Text(
-          '${_profile.className} • ${_profile.studentCount} crianças',
+          '${_profile.className} • ${_studentsFromDb.length} criança(s)',
           style: TextStyle(fontSize: 14, color: Colors.grey[700]),
         ),
       ],
@@ -104,10 +125,14 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
       children: [
         const Text(
           'Minha Turma',
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF2D3142),
+          ),
         ),
         Text(
-          '${_profile.studentCount} alunos',
+          '${_studentsFromDb.length} aluno(s)',
           style: TextStyle(fontSize: 14, color: Colors.grey[600]),
         ),
       ],
@@ -119,9 +144,9 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: _students.length,
+      itemCount: _studentsFromDb.length,
       itemBuilder: (context, index) {
-        final student = _students[index];
+        final student = _studentsFromDb[index];
         return Container(
           margin: const EdgeInsets.only(bottom: 15),
           padding: const EdgeInsets.all(15),
@@ -152,16 +177,26 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                       children: [
                         Text(
                           student.name,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF2D3142),
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           student.age,
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                          ),
                         ),
                         Text(
                           'Resp: ${student.responsibleName}',
-                          style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                          ),
                         ),
                       ],
                     ),
@@ -177,7 +212,16 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                     icon: Icons.add,
                     color: const Color(0xFF5A45FF), // Roxo/Azul
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  RegistrationView(studentId: student.id, studentName: student.name,)));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegistrationView(
+                            studentId: student.id.toString(),
+                            studentName: student.name,
+                            professorCpf: widget.user.cpf,
+                          ),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(width: 8),
@@ -186,8 +230,19 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                     icon: Icons.camera_alt_outlined,
                     color: const Color(0xFFB042FF), // Rosa/Roxo claro
                     onTap: () {
-                      var studentPhotoContext = StudentPhotoContext(studentId: student.id, studentName: student.name, imageUrl: student.imageUrl);
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  AddPhotoView(studentContext:studentPhotoContext)));
+                      var studentPhotoContext = StudentPhotoContext(
+                        studentId: student.id.toString(),
+                        studentName: student.name,
+                        imageUrl: student.imageUrl,
+                        professorCpf: widget.user.cpf,
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              AddPhotoView(studentContext: studentPhotoContext),
+                        ),
+                      );
                     },
                   ),
                   const SizedBox(width: 8),
@@ -196,7 +251,15 @@ class _ProfessorDashboardViewState extends State<ProfessorDashboardView> {
                     icon: Icons.description_outlined,
                     color: const Color(0xFF00C4A7), // Verde/Teal
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) =>  StudentFileView(studentId: student.id, studentName: student.name,)));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StudentFileView(
+                            studentId: student.id.toString(),
+                            studentName: student.name,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ],

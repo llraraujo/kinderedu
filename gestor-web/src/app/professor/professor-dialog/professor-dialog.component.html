@@ -7,20 +7,21 @@
     <form [formGroup]="professorForm" (ngSubmit)="onSubmit()" class="modal-form">
 
       <div class="form-group">
-        <label for="nomeCompleto">Nome completo</label>
-        <input id="nomeCompleto" type="text" formControlName="nomeCompleto" placeholder="Ex: Maria da Silva"
+        <label for="nome">Nome completo</label>
+        <input id="nome" type="text" formControlName="nome" placeholder="Ex: Maria da Silva"
                [class.is-invalid]="professorForm.get('nomeCompleto')?.invalid && professorForm.get('nomeCompleto')?.touched">
       </div>
 
       <div class="form-group">
-        <label for="email">E-mail</label>
-        <input id="email" type="email" formControlName="email" placeholder="professor@escola.com"
+        <label for="emailInstitucional">E-mail</label>
+        <input id="emailInstitucional" type="email" formControlName="emailInstitucional" placeholder="professor@escola.com"
                [class.is-invalid]="professorForm.get('email')?.invalid && professorForm.get('email')?.touched">
       </div>
 
       <div class="form-group">
         <label for="cpf">CPF</label>
         <input id="cpf" type="text" formControlName="cpf" placeholder="000.000.000-00"
+               inputmode="numeric" maxlength="14" autocomplete="off" (input)="onCpfInput($event)"
                [class.is-invalid]="professorForm.get('cpf')?.invalid && professorForm.get('cpf')?.touched">
       </div>
 
@@ -31,9 +32,9 @@
       </div>
 
       <div class="form-group">
-        <label for="turmaId">Turma</label>
-        <select id="turmaId" formControlName="turmaId"
-                [class.is-invalid]="professorForm.get('turmaId')?.invalid && professorForm.get('turmaId')?.touched">
+        <label for="idTurma">Turma</label>
+        <select id="idTurma" formControlName="idTurma"
+                [class.is-invalid]="professorForm.get('idTurma')?.invalid && professorForm.get('idTurma')?.touched">
           <option value="" disabled selected>Selecione uma turma</option>
           @for (turma of turmas; track turma.id) {
             <option [value]="turma.id">{{ turma.nome }}</option>

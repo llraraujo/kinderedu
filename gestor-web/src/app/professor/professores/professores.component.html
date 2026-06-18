@@ -9,7 +9,8 @@
   </nav>
 
   <header class="page-header">
-    <div class="header-info">
+    <div>
+      <h1>Gerenciar Professores</h1>
       <p>{{ professores.length }} professor(es) cadastrado(s)</p>
     </div>
     <button class="btn-primary" (click)="openDialog()">
@@ -23,12 +24,39 @@
       <div class="empty-state">
         <span class="material-icons-outlined empty-icon">school</span>
         <h3>Nenhum professor cadastrado</h3>
-        <p>Clique em "Novo Professor" para começar</p>
+        <p>Clique em "Novo Professor" para come&ccedil;ar</p>
       </div>
     }
 
-    @if (professores.length > 0) {
+    @else if (professores.length > 0) {
       <div class="professores-grid">
+        @for (professor of professores; track professor.id ?? $index) {
+          <article class="professor-card">
+            <div class="card-header">
+              <div class="teacher-icon">
+                <span class="material-icons-outlined">school</span>
+              </div>
+              <span class="turma-badge">{{ getTurmaNome(professor.idTurma) }}</span>
+            </div>
+
+            <div class="card-body">
+              <h2>{{ professor.nomeCompleto }}</h2>
+              <p>{{ professor.emailInstitucional }}</p>
+            </div>
+
+            <div class="card-footer">
+              <div class="meta-item">
+                <span class="material-icons-outlined">call</span>
+                <span>{{ professor.telefone }}</span>
+              </div>
+
+              <div class="meta-item">
+                <span class="material-icons-outlined">badge</span>
+                <span>{{ professor.cpf }}</span>
+              </div>
+            </div>
+          </article>
+        }
       </div>
     }
   </main>
@@ -36,7 +64,8 @@
   @if (isModalOpen) {
     <app-professor-dialog
       (closeDialog)="closeDialog()"
-      (saveProfessor)="onSalvarProfessor($event)">
+      (saveProfessor)="onSalvarProfessor($event)"
+      [turmas]="turmas">
     </app-professor-dialog>
   }
 </div>

@@ -1,7 +1,11 @@
 package com.kinderedu.backend.services;
 
+import com.kinderedu.backend.domain.dto.AlunoListagemMobileDTO;
 import com.kinderedu.backend.domain.dto.TurmaCadastroDTO;
+import com.kinderedu.backend.domain.dto.TurmaListagemDTO;
+import com.kinderedu.backend.domain.entities.Aluno;
 import com.kinderedu.backend.domain.entities.Turma;
+import com.kinderedu.backend.respository.AlunoRepository;
 import com.kinderedu.backend.respository.TurmaRepository;
 import com.kinderedu.backend.util.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +18,17 @@ import java.util.List;
 public class TurmaService {
 
     private final TurmaRepository turmaRepository;
+    private final AlunoRepository alunoRepository;
 
     @Autowired
-    public TurmaService(TurmaRepository turmaRepository) {
+    public TurmaService(TurmaRepository turmaRepository, AlunoRepository alunoRepository) {
         this.turmaRepository = turmaRepository;
+        this.alunoRepository = alunoRepository;
     }
 
-    public List<Turma> todasAsTurmas() {
-       return this.turmaRepository.findAll();
+    public List<TurmaListagemDTO> todasAsTurmas() {
+        List<Turma> turmas = this.turmaRepository.findAllComProfessor();
+        return  turmas.stream().map(TurmaListagemDTO::new).toList();
     }
 
     public Turma create(TurmaCadastroDTO turmaDTO){
@@ -34,21 +41,8 @@ public class TurmaService {
         return this.turmaRepository.findById(id).get();
     }
 
-    private Turma convertDtoToEntity(TurmaCadastroDTO turmaDTO) {
-        Turma turma = new Turma();
-        turma.setNome(turmaDTO.getNome());
-        turma.setAnoSerie(turmaDTO.getAnoSerie());
-        turma.setCapacidade(turmaDTO.getCapacidade());
-        turma.setTurno(turmaDTO.getTurno());
-        return turma;
-    }
-
-    private TurmaCadastroDTO convertEntityToDto(TurmaCadastroDTO turmaDTO) {
-        Turma turma = new Turma();
-        turma.setNome(turmaDTO.getNome());
-        turma.setAnoSerie(turmaDTO.getAnoSerie());
-        turma.setCapacidade(turmaDTO.getCapacidade());
-        turma.setTurno(turmaDTO.getTurno());
-        return turmaDTO;
+    public List<AlunoListagemMobileDTO> alunosPorCpfProfessor(String professorCpf){
+        List<Aluno> alunos = alunoRepository.findByProfessorCpfComResponsavel(professorCpf);
+        return alunos.stream().map(AlunoListagemMobileDTO::new).toList();
     }
 }

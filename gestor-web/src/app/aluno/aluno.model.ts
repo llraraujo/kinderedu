@@ -1,11 +1,9 @@
 export interface Aluno {
-  id?: string;
-  // Dados do Aluno
+  id?: number;
   nomeCompleto: string;
   matricula: string;
-  dataNascimento: string;
-  turmaId: string;
-  // Dados do Responsável
+  dataNascimento: Date;
+  turmaId: number;
   nomeResponsavel: string;
   cpf: string;
   email: string;

@@ -1,11 +1,108 @@
 import 'package:flutter/material.dart';
 import 'package:kinderedu/models/header_model.dart';
+import 'package:kinderedu/services/api_config.dart';
 import '../models/dashboard_model.dart'; // Ajuste o import conforme sua estrutura
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class DashboardController {
   // Simula a busca de dados do perfil da criança
+
+  final String baseURL = ApiConfig.baseUrl;
+
   ChildProfile getChildProfile() {
     return childProfileHeader;
+  }
+
+  Future<ChildProfile> getChildProfileFromDb(String cpfResponsavel) async {
+    final url = Uri.parse("$baseURL/alunos/$cpfResponsavel");
+    ChildProfile childProfile = childProfileHeader;
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as Map<String, dynamic>;
+        return ChildProfile.fromJson(decoded);
+      } else {
+        print("Erro ao recuper o sumário de atividades");
+      }
+    } catch (e) {
+      print("Erro ao recuper o perfil da criança");
+    }
+    return childProfile;
+  }
+
+  Future<List<ActivitySummary>> getAtividadesFromDb(int studentId) async {
+    final url = Uri.parse("$baseURL/alunos/atividades/$studentId");
+    List<ActivitySummary> atividades = [];
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final decoded = jsonDecode(response.body) as List<dynamic>;
+        var atividadesDb = decoded
+            .map(
+              (value) => ActivityFromDb.fromJson(value as Map<String, dynamic>),
+            )
+            .toList();
+        atividades = convertActivityFromDbToSummary(atividadesDb);
+        return atividades;
+      } else {
+        print("Erro ao recuper o sumário de atividades");
+      }
+    } catch (e) {
+      print('Connection Error: $e');
+    }
+
+    return atividades;
+  }
+
+  List<ActivitySummary> convertActivityFromDbToSummary(
+    List<ActivityFromDb> activities,
+  ) {
+    List<ActivitySummary> summary = [];
+    for (var activity in activities) {
+      switch (activity.tipoAtividade) {
+        case "SONECA":
+          summary.add(
+            ActivitySummary(
+              title: "Sonecas",
+              count: activity.quantidade,
+              lastTime: activity.ultimaAtualizacao.toString(),
+              icon: Icons.nightlight_round,
+              primaryColor: Colors.purpleAccent,
+              backgroundColor: Colors.purple.withOpacity(0.1),
+            ),
+          );
+          break;
+
+        case "ALIMENTACAO":
+          summary.add(
+            ActivitySummary(
+              title: "Alimentação",
+              count: activity.quantidade,
+              lastTime: activity.ultimaAtualizacao.toString(),
+              icon: Icons.restaurant,
+              primaryColor: Colors.orange,
+              backgroundColor: Colors.orange.withOpacity(0.1),
+            ),
+          );
+          break;
+
+        case "HIGIENE":
+          summary.add(
+            ActivitySummary(
+              title: "Higiene",
+              count: activity.quantidade,
+              lastTime: activity.ultimaAtualizacao.toString(),
+              icon: Icons.child_care,
+              primaryColor: Colors.green,
+              backgroundColor: Colors.green.withOpacity(0.1),
+            ),
+          );
+          break;
+      }
+    }
+
+    return summary;
   }
 
   // Simula a busca das atividades do dia

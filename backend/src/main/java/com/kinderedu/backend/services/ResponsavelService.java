@@ -25,14 +25,6 @@ public class ResponsavelService {
     }
 
 
-    public Responsavel buscarPorId(Long id) {
-        return this.responsavelRepository.findById(id).get();
-    }
-
-    public Responsavel buscarPorCpf(String cpf) {
-        return this.responsavelRepository.findByCpf(cpf);
-    }
-
     public Responsavel create(ResponsavelCadastroDTO responsavelDTO) {
         Responsavel responsavel = Mapper.convertDtoToEntity(responsavelDTO);
         responsavel = this.responsavelRepository.save(responsavel);

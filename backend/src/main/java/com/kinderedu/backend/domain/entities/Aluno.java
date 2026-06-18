@@ -34,6 +34,9 @@ public class Aluno  implements Serializable {
     @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Atividade> atividades = new HashSet<>();
 
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<FotoAluno> fotos = new HashSet<>();
+
     public Aluno() {
     }
 
@@ -119,5 +122,14 @@ public class Aluno  implements Serializable {
     public void addAtividade(Atividade atividade) {
         atividade.setAluno(this);
         this.atividades.add(atividade);
+    }
+
+    public Set<FotoAluno> getFotos() {
+        return fotos;
+    }
+
+    public void addFoto(FotoAluno foto) {
+        foto.setAluno(this);
+        this.fotos.add(foto);
     }
 }

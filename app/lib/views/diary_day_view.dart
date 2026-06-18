@@ -8,11 +8,15 @@ import '../models/diary_model.dart';
 class DiaryDayView extends StatefulWidget {
   final String month;
   final int year;
+  final ChildProfile profile;
+  final String cpfResponsavel;
 
   const DiaryDayView({
     Key? key,
     required this.month,
     required this.year,
+    required this.profile,
+    required this.cpfResponsavel,
   }) : super(key: key);
 
   @override
@@ -21,23 +25,16 @@ class DiaryDayView extends StatefulWidget {
 
 class _DiaryDayViewState extends State<DiaryDayView> {
   final DiaryController _controller = DiaryController();
-  late ChildProfile _profile;
   late List<DiaryDayEntry> _days;
 
   @override
   void initState() {
     super.initState();
-    _profile = _controller.getChildProfile();
     _days = _controller.getDaysForMonth(widget.month, widget.year);
   }
 
-  int getMonth(String month){
-    switch(month.trim().toUpperCase()){
-      case "OUTUBRO": return 10;
-      case "NOVEMBRO": return 11;
-      case "DEZEMBRO": return 12;
-      default: return -1;
-    }    
+  int getMonth(String month) {
+    return _controller.monthNumberFromName(month);
   }
 
   @override
@@ -46,7 +43,7 @@ class _DiaryDayViewState extends State<DiaryDayView> {
       backgroundColor: const Color(0xFFF8F9FE),
       body: Column(
         children: [
-          header(_profile),
+          header(widget.profile),
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
@@ -64,16 +61,15 @@ class _DiaryDayViewState extends State<DiaryDayView> {
     );
   }
 
-  
-
-  // Card com seta de voltar e título do mês
   Widget _buildNavigationHeader(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10),
+        ],
       ),
       child: Row(
         children: [
@@ -94,8 +90,12 @@ class _DiaryDayViewState extends State<DiaryDayView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Relatório de Atividades',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF2D3142)),
+                'Relatorio de Atividades',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF2D3142),
+                ),
               ),
               Text(
                 '${widget.month} de ${widget.year}',
@@ -108,43 +108,63 @@ class _DiaryDayViewState extends State<DiaryDayView> {
     );
   }
 
-  // Grade de Dias
   Widget _buildDaysGrid() {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, // 3 colunas como na imagem
+        crossAxisCount: 3,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 0.85, // Ajuste para o card ser levemente vertical
+        childAspectRatio: 0.85,
       ),
       itemCount: _days.length,
       itemBuilder: (context, index) {
         final dayEntry = _days[index];
         return InkWell(
           onTap: () {
-            // Aqui navegaria para a Timeline (DiaryView) do dia específico
-            Navigator.push(context, MaterialPageRoute(builder: (context) => DiaryDayTimelineView(date: DateTime(widget.year, getMonth(widget.month),dayEntry.day),)));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DiaryDayTimelineView(
+                  date: DateTime(
+                    widget.year,
+                    getMonth(widget.month),
+                    dayEntry.day,
+                  ),
+                  profile: widget.profile,
+                  cpfResponsavel: widget.cpfResponsavel,
+                ),
+              ),
+            );
           },
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.grey.withOpacity(0.1)),
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 5)],
+              boxShadow: [
+                BoxShadow(color: Colors.black.withOpacity(0.01), blurRadius: 5),
+              ],
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(Icons.description, color: Color(0xFF4ADE80), size: 28), // Ícone verde
+                const Icon(
+                  Icons.description,
+                  color: Color(0xFF4ADE80),
+                  size: 28,
+                ),
                 const SizedBox(height: 8),
                 Text(
                   'Dia ${dayEntry.day}',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
                 ),
                 const Text(
-                  'Ver relatório',
+                  'Ver relatorio',
                   style: TextStyle(color: Colors.grey, fontSize: 11),
                 ),
               ],

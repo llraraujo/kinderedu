@@ -26,7 +26,7 @@ export class TurmaDialogComponent {
     this.turmaForm = this.fb.group({
       nome: ['', Validators.required],
       anoSerie: ['', Validators.required],
-      turno: ['Manhã', Validators.required],
+      turno: ['MANHA', Validators.required],
       capacidade: [20, [Validators.required, Validators.min(1)]]
     });
   }

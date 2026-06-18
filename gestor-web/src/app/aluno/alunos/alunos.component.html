@@ -5,11 +5,12 @@
       <span class="material-icons-outlined">arrow_back</span>
     </a>
     <span class="material-icons-outlined page-icon">groups</span>
-    <span class="page-title">Alunos e Responsáveis</span>
+    <span class="page-title">Alunos e Respons&aacute;veis</span>
   </nav>
 
   <header class="page-header">
-    <div class="header-info">
+    <div>
+      <h1>Gerenciar Alunos</h1>
       <p>{{ alunos.length }} aluno(s) cadastrado(s)</p>
     </div>
     <button class="btn-primary" (click)="openDialog()">
@@ -23,12 +24,44 @@
       <div class="empty-state">
         <span class="material-icons-outlined empty-icon">groups</span>
         <h3>Nenhum aluno cadastrado</h3>
-        <p>Clique em "Novo Aluno" para começar</p>
+        <p>Clique em "Novo Aluno" para come&ccedil;ar</p>
       </div>
     }
 
-    @if (alunos.length > 0) {
+    @else if (alunos.length > 0) {
       <div class="alunos-grid">
+        @for (aluno of alunos; track aluno.id ?? $index) {
+          <article class="aluno-card">
+            <div class="card-header">
+              <div class="student-icon">
+                <span class="material-icons-outlined">face</span>
+              </div>
+              <span class="turma-badge">{{ getTurmaNome(aluno.turmaId) }}</span>
+            </div>
+
+            <div class="card-body">
+              <h2>{{ aluno.nomeCompleto }}</h2>
+              <p>Matr&iacute;cula {{ aluno.matricula }}</p>
+            </div>
+
+            <div class="card-footer">
+              <div class="meta-item">
+                <span class="material-icons-outlined">cake</span>
+                <span>{{ aluno.dataNascimento | date: 'dd/MM/yyyy' }}</span>
+              </div>
+
+              <div class="meta-item">
+                <span class="material-icons-outlined">supervisor_account</span>
+                <span>{{ aluno.nomeResponsavel }}</span>
+              </div>
+
+              <div class="meta-item">
+                <span class="material-icons-outlined">call</span>
+                <span>{{ aluno.telefone }}</span>
+              </div>
+            </div>
+          </article>
+        }
       </div>
     }
   </main>
@@ -36,7 +69,8 @@
   @if (isModalOpen) {
     <app-aluno-dialog
       (closeDialog)="closeDialog()"
-      (saveAluno)="onSalvarAluno($event)">
+      (saveAluno)="onSalvarAluno($event)"
+      [turmas]="turmas">
     </app-aluno-dialog>
   }
 </div>
